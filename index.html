@@ -1,83 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title> </title>
-    <style>
-        /* This makes the whole page look empty and clean */
-        body { margin: 0; padding: 0; background-color: #ffffff; height: 100vh; overflow: hidden; }
+// ... (Your start page code stays the same)
 
-        /* Styles the small grey button in the bottom left */
-        .transfer-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 8px 15px;
-            font-size: 14px;
-            color: #555;
-            background-color: #e7e7e7; /* Light grey color */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: sans-serif;
-            transition: 0.2s;
-        }
+<script>
+    document.getElementById('launchPortal').onclick = function() {
+        var win = window.open('about:blank', '_blank');
+        var doc = win.document;
 
-        .transfer-btn:hover {
-            background-color: #d7d7d7; /* Slightly darker grey on hover */
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Only the transfer button is visible on the start page -->
-    <button class="transfer-btn" id="launchPortal">Transfer</button>
-
-    <script>
-        document.getElementById('launchPortal').onclick = function() {
-            var win = window.open('about:blank', '_blank');
-            var doc = win.document;
-
-            // This is your hidden game portal content
-            var html = `
-                <html>
-                <head>
-                    <title> </title>
-                    <style>
-                        body { background: #111; color: white; font-family: sans-serif; padding: 20px; }
-                        #search { width: 100%; padding: 15px; border-radius: 8px; border: none; background: #222; color: white; margin-bottom: 20px; outline: none; }
-                        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-                        .game-card { background: #222; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
-                        .game-card:hover { background: #333; border-color: #4CAF50; transform: translateY(-3px); }
-                        .game-card img { width: 120px; height: 120px; border-radius: 8px; object-fit: cover; }
-                        .game-card p { margin-top: 10px; font-weight: bold; }
-                    </style>
-                </head>
-                <body>
-                    <input type="text" id="search" placeholder="Search for a game..." onkeyup="filterGames()">
-                    <div class="grid" id="gameGrid">
-                        <!-- Add your game cards below this line -->
-                        <div class="game-card" onclick="location.href='https://example-game-link.com'">
-                            <img src="your-icon-file.png" alt="Game Name">
-                            <p>Game Name</p>
-                        </div>
+        var html = `
+            <html>
+            <head>
+                <title>Classes</title>
+                <style>
+                    /* Your existing portal styles */
+                    body { background: #111; color: white; font-family: sans-serif; padding: 20px; }
+                    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+                    .game-card { background: #222; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid #333; }
+                    .game-card img { width: 120px; height: 120px; border-radius: 8px; object-fit: cover; }
+                </style>
+            </head>
+            <body>
+                <input type="text" id="search" placeholder="Search..." onkeyup="filterGames()">
+                <div class="grid" id="gameGrid">
+                    
+                    <!-- NEW GAME CARD EXAMPLE USING THE IFRAME METHOD -->
+                    <div class="game-card" onclick="openGame('https://gum.criteo.com/syncframe?origin=publishertagids&topUrl=www.crazygames.com&gdpr=0&gdpr_consent=&gpp=DBAA&gpp_sid=-1#{&quot;bundle&quot;:{&quot;value&quot;:&quot;tFDs4l9xN1Q1Vno0S05xYiUyRjZXR29kUE1wcExzSlJWaVJCeTdnZSUyRldHU0pRVWJaRVRLb254amEyNFF6bzVFRVNtZTEwaWROc2RaZnRiUXlDUkxFd3BHck1qJTJGZlc2UU1rWVlRSmJZbEdURnMxTUFEVUZXT2lybW9QbzR6Q3Z2SGhKeGdRSnMlMkZ2Q2dnZjAyYTFLUnhueTVad3VtdyUzRCUzRA&quot;,&quot;origin&quot;:3},&quot;optout&quot;:{&quot;value&quot;:false,&quot;origin&quot;:0},&quot;tld&quot;:&quot;crazygames.com&quot;,&quot;topUrl&quot;:&quot;www.crazygames.com&quot;,&quot;version&quot;:106575,&quot;origin&quot;:&quot;publishertagids&quot;,&quot;requestId&quot;:&quot;0.5272093665698563&quot;}')">
+                        <img src="YOUR_ICON_URL" alt="GeoGuessr">
+                        <p>GeoGuessr</p>
                     </div>
 
-                    <script>
-                        function filterGames() {
-                            let input = document.getElementById('search').value.toLowerCase();
-                            let cards = document.getElementsByClassName('game-card');
-                            for (let i = 0; i < cards.length; i++) {
-                                let title = cards[i].getElementsByTagName('p')[0].innerText.toLowerCase();
-                                cards[i].style.display = title.includes(input) ? "block" : "none";
-                            }
+                </div>
+
+                <script>
+                    // 1. The NEW function to open games in a clean iframe
+                    function openGame(url) {
+                        var gameWin = window.open('about:blank', '_blank');
+                        gameWin.document.write('<style>body,html{margin:0;padding:0;height:100%;overflow:hidden;}iframe{width:100%;height:100%;border:none;}</style><iframe src="' + url + '"></iframe>');
+                    }
+
+                    // 2. Your existing Search Filter function
+                    function filterGames() {
+                        let input = document.getElementById('search').value.toLowerCase();
+                        let cards = document.getElementsByClassName('game-card');
+                        for (let i = 0; i < cards.length; i++) {
+                            let title = cards[i].innerText.toLowerCase();
+                            cards[i].style.display = title.includes(input) ? "block" : "none";
                         }
-                    <\/script>
-                </body>
-                </html>
-            `;
-            doc.write(html);
-            doc.close();
-        };
-    </script>
-</body>
-</html>
+                    }
+                <\/script>
+            </body>
+            </html>
+        `;
+        doc.write(html);
+        doc.close();
+    };
+</script>
