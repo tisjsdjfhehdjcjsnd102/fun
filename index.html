@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>gelly</title>
+    <title>gelly</title> <!-- Tab name changed to gelly lowercase -->
+    <script>
+        // Auto-refresh once upon visit to fix loading/caching issues
+        (function() {
+            if (!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        })();
+    </script>
     <style>
         body { margin: 0; padding: 0; background-color: #ffffff; height: 100vh; overflow: hidden; }
         .transfer-btn {
@@ -51,22 +60,28 @@
                         <input type="text" id="search" placeholder="Search games..." onkeyup="filterGames()">
                         <div class="grid" id="gameGrid">
                             
-                            <!-- DRIVE MAD: Working Link -->
+                            <!-- DRIVE MAD (Fixed Link) -->
                             <div class="game-card" onclick="openGame('https://ubg77.github.io/game131022/drive-mad/')">
                                 <img src="https://googleusercontent.com" alt="Drive Mad">
-                                <p>Drive Mad</p>
+                                <p>drive mad</p>
                             </div>
 
-                            <!-- WORLDLE (Geography Alternative) -->
-                            <div class="game-card" onclick="openGame('https://teuteuf.fr')">
-                                <img src="https://teuteuf.frfavicon.ico" alt="Worldle">
-                                <p>Worldle</p>
+                            <!-- 1V1.LOL (Fixed Link) -->
+                            <div class="game-card" onclick="openGame('https://github.io')">
+                                <img src="https://googleusercontent.com" alt="1v1.lol">
+                                <p>1v1.lol</p>
                             </div>
 
-                            <!-- ADD YOUR OWN BELOW -->
-                            <div class="game-card" onclick="openGame('PASTE_LINK_3_HERE')">
-                                <img src="https://placeholder.com" alt="Game 3">
-                                <p>Game 3 Name</p>
+                            <!-- SUBWAY SURFERS (Fixed Link) -->
+                            <div class="game-card" onclick="openGame('https://github.io')">
+                                <img src="https://googleusercontent.com" alt="Subway Surfers">
+                                <p>subway surfers</p>
+                            </div>
+
+                            <!-- RETRO BOWL (Fixed Link) -->
+                            <div class="game-card" onclick="openGame('https://github.io')">
+                                <img src="https://googleusercontent.com" alt="Retro Bowl">
+                                <p>retro bowl</p>
                             </div>
 
                         </div>
