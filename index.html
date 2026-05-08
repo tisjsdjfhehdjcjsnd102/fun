@@ -45,24 +45,14 @@
                         .page.active { display: block; }
                         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
                         
+                        .search-header { display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin-bottom: 10px; }
+                        .game-count { font-size: 11px; color: #333; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+                        
                         .search-container { display: flex; gap: 15px; max-width: 800px; margin-bottom: 40px; }
                         #search { flex-grow: 1; padding: 16px 24px; border-radius: 12px; border: 1px solid #222; background: #151515; color: white; outline: none; font-size: 16px; transition: 0.3s; }
                         #search:focus { border-color: #444; background: #1a1a1a; }
                         
-                        #sort-filter { 
-                            padding: 0 20px; 
-                            border-radius: 12px; 
-                            border: 1px solid #222; 
-                            background: #151515; 
-                            color: #888; 
-                            outline: none; 
-                            cursor: pointer; 
-                            font-family: inherit; 
-                            font-size: 14px; 
-                            transition: 0.3s;
-                            appearance: none;
-                            text-align: center;
-                        }
+                        #sort-filter { padding: 0 20px; border-radius: 12px; border: 1px solid #222; background: #151515; color: #888; outline: none; cursor: pointer; font-family: inherit; font-size: 14px; transition: 0.3s; appearance: none; text-align: center; }
                         #sort-filter:hover { border-color: #444; color: #fff; background: #1d1d1d; }
 
                         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; }
@@ -95,6 +85,9 @@
                         </div>
 
                         <div id="games" class="page">
+                            <div class="search-header">
+                                <span class="game-count" id="count-display">Syncing...</span>
+                            </div>
                             <div class="search-container">
                                 <input type="text" id="search" placeholder="Search library..." onkeyup="filterGames()">
                                 <select id="sort-filter" onchange="sortGames()">
@@ -115,25 +108,25 @@
                                     <img src="./icons/bitlifeicon.png" alt="BitLife"><p>BitLife</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-04" onclick="openFrame('./games/geodash/index.html', this)">
-                                    <img src="./icons/geodashicon.png" alt="Geometry Dash"><p>Geo Dash</p>
+                                    <img src="./icons/geodashicon.png" alt="GD"><p>Geometry Dash</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-05" onclick="openFrame('./games/tetris/index.html', this)">
                                     <img src="./icons/tetrisicon.png" alt="Tetris"><p>Tetris</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-06" onclick="openFrame('./games/cookieclicker/index.html', this)">
-                                    <img src="./icons/cookieclickericon.png" alt="Cookie Clicker"><p>Cookie Clicker</p>
+                                    <img src="./icons/cookieclickericon.png" alt="Cookies"><p>Cookie Clicker</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-07" onclick="openFrame('./games/slope/index.html', this)">
                                     <img src="./icons/slopeicon.png" alt="Slope"><p>Slope</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-08" onclick="openFrame('./games/stickmanhook/index.html', this)">
-                                    <img src="./icons/stickmanhookicon.png" alt="Stickman Hook"><p>Stickman Hook</p>
+                                    <img src="./icons/stickmanhookicon.png" alt="Hook"><p>Stickman Hook</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-09" onclick="openFrame('./games/minecraft/index.html', this)">
-                                    <img src="./icons/minecrafticon.png" alt="Minecraft"><p>Minecraft</p>
+                                    <img src="./icons/minecrafticon.png" alt="MC"><p>Minecraft</p>
                                 </div>
                                 <div class="game-card" data-date="2023-01-10" onclick="openFrame('./games/crossyroad/index.html', this)">
-                                    <img src="./icons/crossyroadicon.png" alt="Crossy Road"><p>Crossy Road</p>
+                                    <img src="./icons/crossyroadicon.png" alt="Road"><p>Crossy Road</p>
                                 </div>
                             </div>
                         </div>
@@ -159,6 +152,14 @@
                     </div>
 
                     <script>
+                        function updateCount() {
+                            const count = document.getElementsByClassName('game-card').length;
+                            const display = document.getElementById('count-display');
+                            if(display) display.innerText = count + " Games Available";
+                        }
+                        
+                        setTimeout(updateCount, 100);
+
                         function showPage(pageId) {
                             if (pageId !== 'sounds') { document.getElementById('game-frame').src = ''; }
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -170,6 +171,7 @@
                             let btn = document.getElementById('btn-' + pageId);
                             if(btn) btn.classList.add('active');
                             document.getElementById(pageId).classList.add('active');
+                            if(pageId === 'games') updateCount();
                         }
 
                         function openFrame(url, el) {
@@ -206,10 +208,18 @@
                         function filterGames() {
                             let input = document.getElementById('search').value.toLowerCase();
                             let cards = document.querySelectorAll('.game-card');
+                            let visibleCount = 0;
                             cards.forEach(card => {
                                 let title = card.innerText.toLowerCase();
-                                card.style.display = title.includes(input) ? "block" : "none";
+                                if(title.includes(input)) {
+                                    card.style.display = "block";
+                                    visibleCount++;
+                                } else {
+                                    card.style.display = "none";
+                                }
                             });
+                            const display = document.getElementById('count-display');
+                            if(display) display.innerText = visibleCount + " Games Found";
                         }
 
                         function sortGames() {
