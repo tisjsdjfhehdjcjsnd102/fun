@@ -4,8 +4,6 @@
     <title>gelly</title>
     <style>
         body { margin: 0; padding: 0; background-color: #111; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        
-        /* Stealth Launcher */
         .transfer-btn {
             position: fixed; top: 20px; left: 20px; padding: 10px 20px;
             font-size: 13px; color: #333; background: transparent;
@@ -30,12 +28,8 @@
                     <title> </title>
                     <style>
                         body { background: #0b0b0b; color: #eee; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; width: 100vw; overflow: hidden; }
-                        
-                        /* Sidebar */
                         #sidebar { width: 240px; background: #121212; display: flex; flex-direction: column; padding: 30px 20px; border-right: 1px solid #222; box-sizing: border-box; }
                         .nav-group { display: flex; flex-direction: column; gap: 10px; }
-                        
-                        /* Unified Button Style */
                         .gelly-btn { 
                             background: transparent; color: #888; border: none; padding: 12px 18px; 
                             text-align: left; cursor: pointer; font-size: 15px; border-radius: 10px; 
@@ -43,32 +37,23 @@
                         }
                         .gelly-btn:hover { background: #1d1d1d; color: #fff; transform: translateX(5px); }
                         .gelly-btn.active { background: #eee; color: #111; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
-                        
                         .gelly-btn.panic { margin-top: 10px; color: #555; font-size: 13px; }
                         .gelly-btn.panic:hover { color: #ff4444; background: #221111; }
-
                         .brand-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
                         .brand { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; opacity: 0.1; }
                         .status-msg { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
-
-                        /* Main Content Area */
                         #main-content { flex-grow: 1; display: flex; flex-direction: column; background: radial-gradient(circle at top right, #1a1a1a, #0b0b0b); overflow: hidden; }
                         .page { display: none; padding: 60px; overflow-y: auto; height: 100%; box-sizing: border-box; animation: fadeIn 0.4s ease; }
                         .page.active { display: block; }
                         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
                         .welcome-text { font-size: 64px; font-weight: 800; letter-spacing: -2px; margin-top: 15vh; }
                         .sub-text { font-size: 18px; color: #666; margin-top: 10px; }
-
-                        /* Grid */
                         #search { width: 100%; max-width: 600px; padding: 16px 24px; border-radius: 12px; border: 1px solid #222; background: #151515; color: white; margin-bottom: 40px; outline: none; font-size: 16px; transition: 0.3s; }
                         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; }
                         .game-card { background: #151515; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #222; transition: all 0.4s ease; }
                         .game-card:hover { transform: translateY(-10px); background: #1c1c1c; border-color: #333; }
                         .game-card img { width: 130px; height: 130px; border-radius: 14px; object-fit: cover; margin-bottom: 12px; }
                         .game-card p { margin: 0; font-size: 15px; font-weight: 600; color: #bbb; }
-
-                        /* Player View */
                         #player-container { display: none; width: 100%; height: 100%; background: #000; flex-direction: column; }
                         #player-nav { background: #0f0f0f; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
                         iframe { width: 100%; flex-grow: 1; border: none; }
@@ -135,31 +120,42 @@
 
                     <script>
                         function showPage(pageId) {
+                            // Kill the game/sound board audio if switching to Home or Games list
+                            if (pageId !== 'sounds') {
+                                document.getElementById('game-frame').src = '';
+                            }
+                            
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                             document.getElementById('player-container').style.display = 'none';
                             document.querySelectorAll('.gelly-btn').forEach(b => {
                                 if (b.id !== 'back-btn') b.classList.remove('active');
                             });
+                            
                             let btn = document.getElementById('btn-' + pageId);
                             if(btn) btn.classList.add('active');
                             document.getElementById(pageId).classList.add('active');
                         }
+
                         function openFrame(url) {
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                             document.getElementById('player-container').style.display = 'flex';
                             document.getElementById('game-frame').src = url;
                         }
+
                         function closeFrame() {
                             document.getElementById('game-frame').src = '';
                             document.getElementById('player-container').style.display = 'none';
                             showPage('games');
                         }
+
                         function panicMode() { window.location.href = 'https://google.com'; }
+
                         function toggleFull() {
                             var frame = document.getElementById("game-frame");
                             if (frame.requestFullscreen) frame.requestFullscreen();
                             else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
                         }
+
                         function filterGames() {
                             let input = document.getElementById('search').value.toLowerCase();
                             let cards = document.querySelectorAll('.game-card');
