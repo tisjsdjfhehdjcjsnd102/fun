@@ -31,23 +31,24 @@
                     <style>
                         body { background: #0b0b0b; color: #eee; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; width: 100vw; overflow: hidden; }
                         
-                        /* Sidebar: Modern Glass Look */
+                        /* Sidebar */
                         #sidebar { width: 240px; background: #121212; display: flex; flex-direction: column; padding: 30px 20px; border-right: 1px solid #222; box-sizing: border-box; }
                         .nav-group { display: flex; flex-direction: column; gap: 10px; }
                         
+                        /* Unified Button Style */
                         .gelly-btn { 
                             background: transparent; color: #888; border: none; padding: 12px 18px; 
                             text-align: left; cursor: pointer; font-size: 15px; border-radius: 10px; 
-                            transition: all 0.3s ease; font-weight: 500;
+                            transition: all 0.3s ease; font-weight: 500; font-family: 'Segoe UI', sans-serif;
                         }
                         .gelly-btn:hover { background: #1d1d1d; color: #fff; transform: translateX(5px); }
                         .gelly-btn.active { background: #eee; color: #111; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+                        
                         .gelly-btn.panic { margin-top: 10px; color: #555; font-size: 13px; }
                         .gelly-btn.panic:hover { color: #ff4444; background: #221111; }
 
                         .brand-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
                         .brand { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; opacity: 0.1; }
-                        
                         .status-msg { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
 
                         /* Main Content Area */
@@ -59,16 +60,13 @@
                         .welcome-text { font-size: 64px; font-weight: 800; letter-spacing: -2px; margin-top: 15vh; }
                         .sub-text { font-size: 18px; color: #666; margin-top: 10px; }
 
-                        /* Search & Grid */
+                        /* Grid */
                         #search { width: 100%; max-width: 600px; padding: 16px 24px; border-radius: 12px; border: 1px solid #222; background: #151515; color: white; margin-bottom: 40px; outline: none; font-size: 16px; transition: 0.3s; }
-                        #search:focus { border-color: #444; background: #1a1a1a; box-shadow: 0 0 20px rgba(0,0,0,0.4); }
-                        
                         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; }
-                        .game-card { background: #151515; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #222; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-                        .game-card:hover { transform: translateY(-10px); background: #1c1c1c; border-color: #333; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+                        .game-card { background: #151515; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #222; transition: all 0.4s ease; }
+                        .game-card:hover { transform: translateY(-10px); background: #1c1c1c; border-color: #333; }
                         .game-card img { width: 130px; height: 130px; border-radius: 14px; object-fit: cover; margin-bottom: 12px; }
                         .game-card p { margin: 0; font-size: 15px; font-weight: 600; color: #bbb; }
-                        .game-card:hover p { color: #fff; }
 
                         /* Player View */
                         #player-container { display: none; width: 100%; height: 100%; background: #000; flex-direction: column; }
@@ -118,17 +116,17 @@
                         <div id="sounds" class="page">
                             <div style="margin-top:20vh; text-align:center;">
                                 <h2 style="font-size:32px; letter-spacing:-1px;">Sound Engine</h2>
-                                <button class="gelly-btn active" style="margin:20px auto; padding: 15px 40px;" onclick="openFrame('./soundboard/index.html')">Launch Soundboard</button>
+                                <button class="gelly-btn active" style="margin:20px auto; padding: 15px 40px; text-align:center;" onclick="openFrame('./soundboard/index.html')">Launch Soundboard</button>
                             </div>
                         </div>
 
                         <div id="player-container">
                             <div id="player-nav">
-                                <button class="gelly-btn" onclick="closeFrame()" style="color:#eee;">← Back</button>
+                                <button class="gelly-btn" id="back-btn" onclick="closeFrame()">Back</button>
                                 <span style="font-size:12px; color:#444; letter-spacing:2px; text-transform:uppercase;">System Active</span>
                                 <div style="display: flex; gap: 10px;">
-                                    <button class="gelly-btn" onclick="panicMode()" style="font-size:12px;">Panic</button>
-                                    <button class="gelly-btn active" onclick="toggleFull()" style="font-size:12px; padding: 8px 15px;">Full</button>
+                                    <button class="gelly-btn" onclick="panicMode()" style="font-size:13px; padding: 8px 15px;">Panic</button>
+                                    <button class="gelly-btn active" onclick="toggleFull()" style="font-size:13px; padding: 8px 15px;">Full</button>
                                 </div>
                             </div>
                             <iframe id="game-frame" src=""></iframe>
@@ -139,7 +137,9 @@
                         function showPage(pageId) {
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                             document.getElementById('player-container').style.display = 'none';
-                            document.querySelectorAll('.gelly-btn').forEach(b => b.classList.remove('active'));
+                            document.querySelectorAll('.gelly-btn').forEach(b => {
+                                if (b.id !== 'back-btn') b.classList.remove('active');
+                            });
                             let btn = document.getElementById('btn-' + pageId);
                             if(btn) btn.classList.add('active');
                             document.getElementById(pageId).classList.add('active');
