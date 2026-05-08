@@ -5,14 +5,26 @@
     <link rel="icon" href="img/mlg-favicon.png" />
     <link rel="shortcut icon" href="img/mlg-favicon.png" type="image/x-icon" />
     <link rel="apple-touch-icon" href="img/mlg-favicon.png" type="image/x-icon" />
-    <title>Online Soundboard</title>
+    <title>gelly soundboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="Online Soundboard" />
-    <meta name="description" content="A collection of sounds to play out of context. Perfect for school! Just play it when your teacher is talking and I bet they will love it!" />
+    <meta name="description" content="A collection of sounds to play out of context." />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="stylesheet" href="css/spinner.css" />
+    
+    <!-- Forced Dark Style with Black Text -->
+    <style>
+      body {
+        background-color: #1a1a1a !important; /* Dark background */
+        color: #000000 !important;             /* Pure black text */
+      }
+      h1, h2, div, p {
+        color: #000000 !important;             /* Ensures all text elements are black */
+      }
+    </style>
+
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
@@ -27,11 +39,10 @@
     </script>
   </head>
   <body>
-    <h1>Online Soundboard</h1>
-    <h2>
-      Just click on the colorful buttons to play the sound.<br />
-      <a href="https://forms.gle/hoiTBEZ4p14iupXH6">Click here to submit a sound to be added!</a><br />
-    </h2>
+    <h1>gelly soundboard</h1>
+    
+    <!-- Submission form and instructions removed -->
+    
     <div class="control">
       Audio Controls
       <button class="woah" onclick="javascript:playAll()">Provoke Chaos</button>
