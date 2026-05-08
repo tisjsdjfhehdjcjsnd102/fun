@@ -3,14 +3,31 @@
 <head>
     <title>gelly</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #ffffff; height: 100vh; overflow: hidden; }
+        /* Matches the #111 background of your dashboard */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #111; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        
+        /* Discreet Transfer button */
         .transfer-btn {
-            position: fixed; top: 20px; left: 20px; padding: 8px 15px;
-            font-size: 14px; color: #555; background-color: #e7e7e7;
-            border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-family: sans-serif;
+            position: fixed; 
+            top: 20px; 
+            left: 20px; 
+            padding: 8px 15px;
+            font-size: 14px; 
+            color: #555; 
+            background-color: #1a1a1a; 
+            border: 1px solid #333; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-family: sans-serif;
             z-index: 9999;
         }
-        .transfer-btn:hover { background-color: #d7d7d7; }
+        .transfer-btn:hover { background-color: #222; color: #888; }
     </style>
 </head>
 <body>
@@ -29,44 +46,36 @@
                     <style>
                         body { background: #111; color: white; font-family: sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; width: 100vw; overflow: hidden; }
                         
-                        /* Sidebar Navigation */
                         #sidebar { width: 220px; background: #1a1a1a; display: flex; flex-direction: column; padding: 20px; border-right: 1px solid #333; box-sizing: border-box; }
                         
-                        /* Nav at Top */
                         .nav-group { display: flex; flex-direction: column; margin-bottom: 20px; }
-                        .nav-btn { background: none; color: #aaa; border: none; padding: 12px 15px; text-align: left; cursor: pointer; font-size: 16px; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; }
+                        
+                        /* Menu buttons and Panic button styled the same */
+                        .nav-btn { background: none; color: #aaa; border: none; padding: 12px 15px; text-align: left; cursor: pointer; font-size: 16px; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; font-family: sans-serif; }
                         .nav-btn:hover { background: #333; color: white; }
                         .nav-btn.active { background: #d3d3d3; color: #111; font-weight: bold; }
+                        
+                        /* Panic button specifically styled like menu options */
+                        .panic-btn-menu { color: #aaa; margin-top: auto; margin-bottom: 10px; border: 1px solid transparent; }
+                        .panic-btn-menu:hover { background: #d3d3d3; color: #111; }
 
-                        /* Centered Brand Title */
                         .brand-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
                         .brand { font-size: 32px; font-weight: bold; color: #d3d3d3; letter-spacing: 2px; }
                         
-                        /* Panic Button & Status at Bottom */
-                        #bottom-controls { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
-                        .panic-btn { background: #333; color: #aaa; border: 1px solid #444; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 13px; text-align: center; }
-                        .panic-btn:hover { background: #444; color: #fff; }
                         .status-msg { font-size: 11px; color: #888; padding: 10px; background: #222; border-radius: 5px; border-left: 3px solid #d3d3d3; }
 
-                        /* Main Content Area */
                         #main-content { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
                         .page { display: none; padding: 40px; overflow-y: auto; height: 100%; box-sizing: border-box; }
                         .page.active { display: block; }
                         
-                        /* Home Page */
                         .welcome-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
                         .welcome-text { font-size: 56px; font-weight: bold; margin-bottom: 10px; color: #d3d3d3; }
-                        .sub-text { font-size: 18px; color: #888; }
-
-                        /* Games Grid */
+                        
                         #search { width: 100%; padding: 15px; border-radius: 8px; border: none; background: #222; color: white; margin-bottom: 30px; outline: none; font-size: 16px; }
                         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
                         .game-card { background: #222; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
-                        .game-card:hover { transform: translateY(-5px); border-color: #d3d3d3; background: #2a2a2a; }
-                        .game-card img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-bottom: 10px; }
-                        .game-card p { margin: 0; font-size: 14px; font-weight: bold; }
-
-                        /* Integrated View */
+                        .game-card img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; }
+                        
                         #player-container { display: none; width: 100%; height: 100%; background: #000; flex-direction: column; }
                         #player-nav { background: #1a1a1a; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
                         iframe { width: 100%; flex-grow: 1; border: none; }
@@ -84,56 +93,45 @@
                             <div class="brand">gelly</div>
                         </div>
                         
-                        <div id="bottom-controls">
-                            <button class="panic-btn" onclick="panicMode()">Panic</button>
-                            <div class="status-msg">Update: Panic mode active!</div>
-                        </div>
+                        <button class="nav-btn panic-btn-menu" onclick="panicMode()">Panic</button>
+                        <div class="status-msg">Monday Launch Ready!</div>
                     </div>
 
                     <div id="main-content">
                         <div id="home" class="page active">
                             <div class="welcome-container">
                                 <div class="welcome-text">Welcome to gelly, have fun</div>
-                                <div class="sub-text">Choose an option from the sidebar.</div>
                             </div>
                         </div>
-
                         <div id="games" class="page">
                             <input type="text" id="search" placeholder="Search games..." onkeyup="filterGames()">
                             <div class="grid">
                                 <div class="game-card" onclick="openFrame('./games/flappy/index.html')">
-                                    <img src="./icons/flappybirdicon.png" alt="Flappy Bird">
-                                    <p>Flappy Bird</p>
+                                    <img src="./icons/flappybirdicon.png" alt="Flappy Bird"><p>Flappy Bird</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/drivemad/index.html')">
-                                    <img src="./icons/drivemadicon.png" alt="Drive Mad">
-                                    <p>Drive Mad</p>
+                                    <img src="./icons/drivemadicon.png" alt="Drive Mad"><p>Drive Mad</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/bitlife/index.html')">
-                                    <img src="./icons/bitlifeicon.png" alt="BitLife">
-                                    <p>BitLife</p>
+                                    <img src="./icons/bitlifeicon.png" alt="BitLife"><p>BitLife</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/geodash/index.html')">
-                                    <img src="./icons/geodashicon.png" alt="Geometry Dash">
-                                    <p>Geometry Dash</p>
+                                    <img src="./icons/geodashicon.png" alt="Geometry Dash"><p>Geometry Dash</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/tetris/index.html')">
-                                    <img src="./icons/tetrisicon.png" alt="Tetris">
-                                    <p>Tetris</p>
+                                    <img src="./icons/tetrisicon.png" alt="Tetris"><p>Tetris</p>
                                 </div>
                             </div>
                         </div>
-
                         <div id="sounds" class="page">
                             <div class="welcome-container">
                                 <h2 style="color:#d3d3d3">Soundboard</h2>
-                                <button class="nav-btn" style="background:#d3d3d3; color:#111; padding: 20px 40px; font-weight:bold" onclick="openFrame('./soundboard/index.html')">Open Soundboard</button>
+                                <button class="nav-btn" style="background:#d3d3d3; color:#111; padding: 20px 40px;" onclick="openFrame('./soundboard/index.html')">Open Soundboard</button>
                             </div>
                         </div>
-
                         <div id="player-container">
                             <div id="player-nav">
-                                <button class="nav-btn" onclick="closeFrame()" style="background:#444; margin:0; color:white">← Back</button>
+                                <button class="nav-btn" onclick="closeFrame()" style="background:#444; color:white">← Back</button>
                                 <span style="font-weight:bold; color:#d3d3d3">gelly player</span>
                                 <div style="display: flex; gap: 10px;">
                                     <button class="nav-btn" onclick="panicMode()" style="background:#333; margin:0; color:#aaa; border: 1px solid #444;">Panic</button>
@@ -143,7 +141,6 @@
                             <iframe id="game-frame" src=""></iframe>
                         </div>
                     </div>
-
                     <script>
                         function showPage(pageId) {
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -152,34 +149,22 @@
                             document.getElementById('btn-' + pageId).classList.add('active');
                             document.getElementById(pageId).classList.add('active');
                         }
-
                         function openFrame(url) {
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                             document.getElementById('player-container').style.display = 'flex';
                             document.getElementById('game-frame').src = url;
                         }
-
                         function closeFrame() {
                             document.getElementById('game-frame').src = '';
                             document.getElementById('player-container').style.display = 'none';
-                            if (document.getElementById('btn-sounds').classList.contains('active')) {
-                                showPage('sounds');
-                            } else {
-                                showPage('games');
-                            }
+                            if (document.getElementById('btn-sounds').classList.contains('active')) { showPage('sounds'); } else { showPage('games'); }
                         }
-
-                        function panicMode() {
-                            // Redirect current cloaked tab to school site
-                            window.location.href = 'https://classroom.google.com';
-                        }
-
+                        function panicMode() { window.location.href = 'https://google.com'; }
                         function toggleFull() {
                             var frame = document.getElementById("game-frame");
                             if (frame.requestFullscreen) { frame.requestFullscreen(); }
                             else if (frame.webkitRequestFullscreen) { frame.webkitRequestFullscreen(); }
                         }
-
                         function filterGames() {
                             let input = document.getElementById('search').value.toLowerCase();
                             let cards = document.querySelectorAll('.game-card');
@@ -192,8 +177,13 @@
                 </body>
                 </html>
             `;
+
             doc.write(html);
             doc.close();
+
+            // Self-close the launcher
+            window.open('', '_self', ''); 
+            window.close();
         };
     </script>
 </body>
