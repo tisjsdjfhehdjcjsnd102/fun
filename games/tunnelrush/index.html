@@ -1,56 +1,30 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Tunnel Rush Unblocked</title>
-    <meta name="description" content="Tunnel Rush, Tunnel Rush Unblocked">
-    <meta property="og:image" content="tunnel-rush.png" />
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <script src="js/unity-mod.js"></script>
-    <script src="TemplateData/UnityProgress.js"></script>
-    <!-- <script src="Build/UnityLoader.js"></script> -->
-    <script src="Build/unityloader49.js"></script>
-    <script>
-        window.location="https://ubg44.github.io/TunnelRush/";
-    </script>
-    <script>
-      var gameInstance = UnityLoader.instantiate(
-        "gameContainer",
-        "Build/tunnel-rush-v9.json",
-        {
-            onProgress: UnityProgress,Module:{
-                onRuntimeInitialized: function() {
-                    UnityProgress(gameInstance, "complete")
-                }
-            }
-        });
-
-      function fixGameView() {
-            const gameView= document.getElementById("gameView");
-            if (gameView.clientHeight> gameView.clientWidth) {
-                gameView.style.height= Math.floor(gameView.clientWidth)+ "px";
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            margin: 0px;
-            padding:0px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Tunnel Rush</title>
+    <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="tunnel-rush.css" type="text/css">
 </head>
-<body style="overflow:hidden; margin:0; padding:0;" onload="fixGameView()">
-    <div id="gameView" class="webgl-content" style="position: absolute; width: 100%; height: 100%; margin: 0px; padding:0px;">
-        <div id="gameContainer" style="width: 100%; height: 100%; margin: 0px; padding:0px;"></div>
-        <!--<div class="footer">
-            <div class="webgl-logo"></div>
-            <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-            <div class="title">Tunnel Rush</div>
-        </div>-->
+<body style="align-content: center;">
+<div class="container">
+    <div class="text-center">
+        <br><button type="button" id = "score" class="btn btn-primary btn-lg" >Score: 0</button><br><br>
+        <!--<button id="singlebutton" name="singlebutton" class="btn btn-primary">Next Step!</button>-->
     </div>
-    <script src="js/analytics_ubg_v1_4.js"></script>
+<!--<h1 id="score">Score: 1023</h1>-->
+<div id="canvasDiv">
+    <canvas id="glcanvas" width="900" height="700" style="width:65%; height:60%"></canvas>
+</div>
+</div>
 </body>
+<script src="./jquery-3.3.1.min.js"></script>
+<script src="./gl-matrix.js"></script>
+<script src="./mousetrap.min.js"></script>
+<script src="loadTexture.js"></script>
+<script src="cube.js"></script>
+<script src="tunnel.js"></script>
+<script src="obstaclePole.js"></script>
+<script src="obstacleDisk.js"></script>
+<script src="main.js"></script>
 </html>
