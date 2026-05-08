@@ -95,6 +95,9 @@
                                 <div class="game-card" onclick="openFrame('./games/tetris/index.html')">
                                     <img src="./icons/tetrisicon.png" alt="Tetris"><p>Tetris</p>
                                 </div>
+                                <div class="game-card" onclick="openFrame('./games/cookieclicker/index.html')">
+                                    <img src="./icons/cookieclickericon.png" alt="Cookie Clicker"><p>Cookie Clicker</p>
+                                </div>
                             </div>
                         </div>
 
@@ -120,7 +123,6 @@
 
                     <script>
                         function showPage(pageId) {
-                            // Kill the game/sound board audio if switching to Home or Games list
                             if (pageId !== 'sounds') {
                                 document.getElementById('game-frame').src = '';
                             }
