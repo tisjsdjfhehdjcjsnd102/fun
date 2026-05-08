@@ -3,39 +3,21 @@
 <head>
     <title>gelly</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #111; height: 100vh; overflow: hidden; }
+        body { margin: 0; padding: 0; background-color: #111; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
-        /* Shared Button Style (Matches Menu) */
-        .gelly-btn {
-            background: none; 
-            color: #aaa; 
-            border: none; 
-            padding: 12px 15px; 
-            text-align: left; 
-            cursor: pointer; 
-            font-size: 16px; 
-            border-radius: 8px; 
-            transition: 0.2s; 
-            font-family: sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .gelly-btn:hover { background: #333; color: white; }
-        .gelly-btn.active { background: #d3d3d3; color: #111; font-weight: bold; }
-
-        /* Transfer button specific positioning */
+        /* Stealth Launcher */
         .transfer-btn {
-            position: fixed; 
-            top: 20px; 
-            left: 20px; 
-            border: 1px solid #333; /* Slight border to see it on #111 background */
-            z-index: 9999;
+            position: fixed; top: 20px; left: 20px; padding: 10px 20px;
+            font-size: 13px; color: #333; background: transparent;
+            border: 1px solid transparent; border-radius: 6px; cursor: pointer;
+            transition: 0.5s; z-index: 9999;
         }
+        .transfer-btn:hover { color: #888; border-color: #333; background: #1a1a1a; }
     </style>
 </head>
 <body>
 
-    <button class="gelly-btn transfer-btn" id="launchPortal">Transfer</button>
+    <button class="transfer-btn" id="launchPortal">Transfer</button>
 
     <script>
         document.getElementById('launchPortal').onclick = function() {
@@ -47,36 +29,50 @@
                 <head>
                     <title> </title>
                     <style>
-                        body { background: #111; color: white; font-family: sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+                        body { background: #0b0b0b; color: #eee; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; width: 100vw; overflow: hidden; }
                         
-                        #sidebar { width: 220px; background: #1a1a1a; display: flex; flex-direction: column; padding: 20px; border-right: 1px solid #333; box-sizing: border-box; }
+                        /* Sidebar: Modern Glass Look */
+                        #sidebar { width: 240px; background: #121212; display: flex; flex-direction: column; padding: 30px 20px; border-right: 1px solid #222; box-sizing: border-box; }
+                        .nav-group { display: flex; flex-direction: column; gap: 10px; }
                         
-                        .nav-group { display: flex; flex-direction: column; }
-                        
-                        /* Re-using the Button Style */
-                        .gelly-btn { background: none; color: #aaa; border: none; padding: 12px 15px; text-align: left; cursor: pointer; font-size: 16px; border-radius: 8px; margin-bottom: 8px; transition: 0.2s; font-family: sans-serif; }
-                        .gelly-btn:hover { background: #333; color: white; }
-                        .gelly-btn.active { background: #d3d3d3; color: #111; font-weight: bold; }
+                        .gelly-btn { 
+                            background: transparent; color: #888; border: none; padding: 12px 18px; 
+                            text-align: left; cursor: pointer; font-size: 15px; border-radius: 10px; 
+                            transition: all 0.3s ease; font-weight: 500;
+                        }
+                        .gelly-btn:hover { background: #1d1d1d; color: #fff; transform: translateX(5px); }
+                        .gelly-btn.active { background: #eee; color: #111; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+                        .gelly-btn.panic { margin-top: 10px; color: #555; font-size: 13px; }
+                        .gelly-btn.panic:hover { color: #ff4444; background: #221111; }
 
-                        .brand-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
-                        .brand { font-size: 32px; font-weight: bold; color: #d3d3d3; letter-spacing: 2px; }
+                        .brand-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+                        .brand { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; opacity: 0.1; }
                         
-                        .status-msg { font-size: 11px; color: #888; padding: 10px; background: #222; border-radius: 5px; border-left: 3px solid #d3d3d3; margin-top: auto; }
+                        .status-msg { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
 
-                        #main-content { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-                        .page { display: none; padding: 40px; overflow-y: auto; height: 100%; box-sizing: border-box; }
+                        /* Main Content Area */
+                        #main-content { flex-grow: 1; display: flex; flex-direction: column; background: radial-gradient(circle at top right, #1a1a1a, #0b0b0b); overflow: hidden; }
+                        .page { display: none; padding: 60px; overflow-y: auto; height: 100%; box-sizing: border-box; animation: fadeIn 0.4s ease; }
                         .page.active { display: block; }
+                        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+                        .welcome-text { font-size: 64px; font-weight: 800; letter-spacing: -2px; margin-top: 15vh; }
+                        .sub-text { font-size: 18px; color: #666; margin-top: 10px; }
+
+                        /* Search & Grid */
+                        #search { width: 100%; max-width: 600px; padding: 16px 24px; border-radius: 12px; border: 1px solid #222; background: #151515; color: white; margin-bottom: 40px; outline: none; font-size: 16px; transition: 0.3s; }
+                        #search:focus { border-color: #444; background: #1a1a1a; box-shadow: 0 0 20px rgba(0,0,0,0.4); }
                         
-                        .welcome-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
-                        .welcome-text { font-size: 56px; font-weight: bold; margin-bottom: 10px; color: #d3d3d3; }
-                        
-                        #search { width: 100%; padding: 15px; border-radius: 8px; border: none; background: #222; color: white; margin-bottom: 30px; outline: none; font-size: 16px; }
-                        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-                        .game-card { background: #222; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
-                        .game-card img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; }
-                        
+                        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; }
+                        .game-card { background: #151515; padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #222; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+                        .game-card:hover { transform: translateY(-10px); background: #1c1c1c; border-color: #333; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+                        .game-card img { width: 130px; height: 130px; border-radius: 14px; object-fit: cover; margin-bottom: 12px; }
+                        .game-card p { margin: 0; font-size: 15px; font-weight: 600; color: #bbb; }
+                        .game-card:hover p { color: #fff; }
+
+                        /* Player View */
                         #player-container { display: none; width: 100%; height: 100%; background: #000; flex-direction: column; }
-                        #player-nav { background: #1a1a1a; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+                        #player-nav { background: #0f0f0f; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
                         iframe { width: 100%; flex-grow: 1; border: none; }
                     </style>
                 </head>
@@ -85,28 +81,24 @@
                         <div class="nav-group">
                             <button class="gelly-btn active" id="btn-home" onclick="showPage('home')">Home</button>
                             <button class="gelly-btn" id="btn-games" onclick="showPage('games')">Games</button>
-                            <button class="gelly-btn" id="btn-sounds" onclick="showPage('sounds')">Sound Board</button>
-                            <button class="gelly-btn" id="btn-panic" onclick="panicMode()">Panic</button>
+                            <button class="gelly-btn" id="btn-sounds" onclick="showPage('sounds')">Sounds</button>
+                            <button class="gelly-btn panic" onclick="panicMode()">Panic</button>
                         </div>
-
-                        <div class="brand-container">
-                            <div class="brand">gelly</div>
-                        </div>
-                        
-                        <div class="status-msg">Monday Launch Ready!</div>
+                        <div class="brand-container"><div class="brand">gelly</div></div>
+                        <div class="status-msg">v2.0 // Active</div>
                     </div>
 
                     <div id="main-content">
                         <div id="home" class="page active">
-                            <div class="welcome-container">
-                                <div class="welcome-text">Welcome to gelly, have fun</div>
-                            </div>
+                            <div class="welcome-text">welcome to gelly.</div>
+                            <div class="sub-text">select a module from the terminal to begin.</div>
                         </div>
+
                         <div id="games" class="page">
-                            <input type="text" id="search" placeholder="Search games..." onkeyup="filterGames()">
+                            <input type="text" id="search" placeholder="Search library..." onkeyup="filterGames()">
                             <div class="grid">
                                 <div class="game-card" onclick="openFrame('./games/flappy/index.html')">
-                                    <img src="./icons/flappybirdicon.png" alt="Flappy Bird"><p>Flappy Bird</p>
+                                    <img src="./icons/flappybirdicon.png" alt="Flappy"><p>Flappy Bird</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/drivemad/index.html')">
                                     <img src="./icons/drivemadicon.png" alt="Drive Mad"><p>Drive Mad</p>
@@ -115,31 +107,34 @@
                                     <img src="./icons/bitlifeicon.png" alt="BitLife"><p>BitLife</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/geodash/index.html')">
-                                    <img src="./icons/geodashicon.png" alt="Geometry Dash"><p>Geometry Dash</p>
+                                    <img src="./icons/geodashicon.png" alt="Geometry Dash"><p>Geo Dash</p>
                                 </div>
                                 <div class="game-card" onclick="openFrame('./games/tetris/index.html')">
                                     <img src="./icons/tetrisicon.png" alt="Tetris"><p>Tetris</p>
                                 </div>
                             </div>
                         </div>
+
                         <div id="sounds" class="page">
-                            <div class="welcome-container">
-                                <h2 style="color:#d3d3d3">Soundboard</h2>
-                                <button class="gelly-btn active" style="text-align:center; padding: 20px 40px;" onclick="openFrame('./soundboard/index.html')">Open Soundboard</button>
+                            <div style="margin-top:20vh; text-align:center;">
+                                <h2 style="font-size:32px; letter-spacing:-1px;">Sound Engine</h2>
+                                <button class="gelly-btn active" style="margin:20px auto; padding: 15px 40px;" onclick="openFrame('./soundboard/index.html')">Launch Soundboard</button>
                             </div>
                         </div>
+
                         <div id="player-container">
                             <div id="player-nav">
-                                <button class="gelly-btn" onclick="closeFrame()" style="margin:0;">← Back</button>
-                                <span style="font-weight:bold; color:#d3d3d3">gelly player</span>
+                                <button class="gelly-btn" onclick="closeFrame()" style="color:#eee;">← Back</button>
+                                <span style="font-size:12px; color:#444; letter-spacing:2px; text-transform:uppercase;">System Active</span>
                                 <div style="display: flex; gap: 10px;">
-                                    <button class="gelly-btn" onclick="panicMode()" style="margin:0;">Panic</button>
-                                    <button class="gelly-btn" onclick="toggleFull()" style="margin:0;">Fullscreen</button>
+                                    <button class="gelly-btn" onclick="panicMode()" style="font-size:12px;">Panic</button>
+                                    <button class="gelly-btn active" onclick="toggleFull()" style="font-size:12px; padding: 8px 15px;">Full</button>
                                 </div>
                             </div>
                             <iframe id="game-frame" src=""></iframe>
                         </div>
                     </div>
+
                     <script>
                         function showPage(pageId) {
                             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -162,8 +157,8 @@
                         function panicMode() { window.location.href = 'https://google.com'; }
                         function toggleFull() {
                             var frame = document.getElementById("game-frame");
-                            if (frame.requestFullscreen) { frame.requestFullscreen(); }
-                            else if (frame.webkitRequestFullscreen) { frame.webkitRequestFullscreen(); }
+                            if (frame.requestFullscreen) frame.requestFullscreen();
+                            else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
                         }
                         function filterGames() {
                             let input = document.getElementById('search').value.toLowerCase();
