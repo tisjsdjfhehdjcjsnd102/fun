@@ -15,12 +15,13 @@
             --text: #eeeeee;
             --subtext: #777777;
             --panic: #ff4444;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
             box-sizing: border-box;
             text-transform: lowercase;
+            cursor: default;
         }
 
         body, html {
@@ -32,13 +33,12 @@
             overflow: hidden;
         }
 
-        button, .nav-item, .game-card {
-            cursor: pointer; /* cursor now changes */
+        button, .nav-item, .game-card, select, input {
+            cursor: pointer;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-
+        
         /* --- Landing --- */
         #landing {
             height: 100vh;
@@ -55,16 +55,16 @@
             left: 20px;
             padding: 10px 20px;
             background: none;
-            border: 1px solid transparent; /* no background initially */
+            border: 1px solid transparent;
             color: var(--subtext);
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 13px;
             transition: var(--transition);
         }
 
         .transfer-btn:hover {
-            border-color: var(--secondary);
             background: var(--secondary);
+            border-color: var(--secondary);
             color: var(--accent);
         }
 
@@ -83,7 +83,7 @@
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .brand {
@@ -95,7 +95,7 @@
             color: var(--accent);
         }
 
-        /* Sidebar Buttons & Shared Button Style */
+        /* Nav & Shared Button Style */
         .nav-item, .btn {
             padding: 12px 18px;
             margin-bottom: 8px;
@@ -110,11 +110,12 @@
             display: block;
             width: 100%;
             font-family: inherit;
+            text-decoration: none;
         }
 
         .nav-item:hover, .nav-item.active, .btn:hover {
             background: var(--secondary);
-            color: var(--accent); /* text stays white */
+            color: var(--accent);
         }
 
         .viewport {
@@ -127,10 +128,9 @@
         .section { display: none; animation: fadeIn 0.5s ease; height: 100%; }
         .section.active { display: block; }
         
-        #home { padding: 40px; }
-        #games { padding: 40px; }
+        #home, #games { padding: 40px; }
 
-        /* --- Soundboard Full Window --- */
+        /* --- Soundboard Full --- */
         #sounds { width: 100%; height: 100%; padding: 0; }
         #sounds iframe { width: 100%; height: 100%; border: none; }
 
@@ -143,20 +143,19 @@
             padding: 12px 20px;
             border-radius: 12px;
             outline: none;
-            cursor: pointer;
         }
         input { flex: 1; cursor: text; }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 25px;
         }
 
         .game-card {
             background: var(--card);
             border-radius: 20px;
-            padding: 10px;
+            padding: 12px;
             transition: var(--transition);
             text-align: center;
         }
@@ -165,7 +164,7 @@
         .game-card img { width: 100%; aspect-ratio: 1/1; border-radius: 15px; margin-bottom: 10px; object-fit: cover; }
         .game-card span { font-size: 13px; color: var(--subtext); font-weight: 600; }
 
-        /* --- Player --- */
+        /* --- Player Overlay --- */
         #player {
             display: none;
             position: fixed;
@@ -185,19 +184,13 @@
 
         .top-right { margin-left: auto; display: flex; gap: 10px; }
 
-        /* design buttons like sidebar */
-        .btn { 
-            width: auto; 
-            padding: 10px 20px; 
-            margin-bottom: 0;
-        }
-
+        .btn { width: auto; padding: 10px 22px; margin-bottom: 0; text-align: center; }
         .btn-panic { color: var(--panic); }
-        .btn-panic:hover { color: #fff; background: var(--panic); }
+        .btn-panic:hover { background: var(--panic); color: #fff; }
 
         #game-frame { width: 100%; height: calc(100% - 70px); border: none; }
 
-        /* --- Update Marker --- */
+        /* --- Logic States --- */
         #version-tag {
             position: fixed;
             bottom: 15px;
@@ -205,10 +198,11 @@
             font-size: 12px;
             color: #1a1a1a;
             pointer-events: none;
+            z-index: 10001;
         }
 
         .hidden { display: none !important; }
-        .fade-out { opacity: 0; transform: translateX(-20px); pointer-events: none; }
+        .fade-sidebar { opacity: 0; transform: translateX(-20px); pointer-events: none; }
     </style>
 </head>
 <body>
@@ -258,7 +252,7 @@
         <iframe id="game-frame" src=""></iframe>
     </div>
 
-    <div id="version-tag">b</div>
+    <div id="version-tag">c</div>
 
     <script>
         const gameData = [
@@ -284,7 +278,7 @@
 
         function transfer() {
             const win = window.open();
-            if (!win) return alert("allow popups");
+            if (!win) return alert("allow popups to cloak");
             win.document.body.style.margin = '0';
             win.document.body.style.height = '100vh';
             win.document.body.style.background = '#050505';
@@ -297,6 +291,7 @@
 
         if (window.self !== window.top || window.location.hash === "#cloaked") {
             document.getElementById('landing').classList.add('hidden');
+            document.getElementById('main-ui').classList.remove('hidden');
             document.getElementById('main-ui').style.display = 'flex';
         }
 
@@ -318,12 +313,11 @@
                 const div = document.createElement('div');
                 div.className = 'game-card';
                 div.onclick = () => {
-                    // Start Sidebar Fade
-                    document.getElementById('sidebar').classList.add('fade-out');
+                    document.getElementById('sidebar').classList.add('fade-sidebar');
                     setTimeout(() => {
                         document.getElementById('player').style.display = 'block';
                         document.getElementById('game-frame').src = `games/${g.id}/index.html`;
-                    }, 400); // Wait for fade before showing player
+                    }, 500);
                 };
                 div.innerHTML = `<img src="icons/${g.img}"><span>${g.name}</span>`;
                 grid.appendChild(div);
@@ -333,7 +327,7 @@
         function closeGame() {
             document.getElementById('player').style.display = 'none';
             document.getElementById('game-frame').src = '';
-            document.getElementById('sidebar').classList.remove('fade-out');
+            document.getElementById('sidebar').classList.remove('fade-sidebar');
         }
 
         function panic() { window.location.href = "https://classroom.google.com"; }
