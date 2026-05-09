@@ -10,17 +10,25 @@
         .gate-brand { font-size: 42px; font-weight: 800; letter-spacing: -2px; margin-bottom: 30px; color: #fff; }
         .gate-label { font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-weight: 600; }
         
-        /* Masked input that looks like plain text to Chrome */
         #pass-input { 
             background: #151515; border: 1px solid #222; padding: 12px 20px; border-radius: 10px; color: #fff; outline: none; text-align: center; font-size: 16px; width: 220px; transition: 0.3s; margin-bottom: 15px;
-            -webkit-text-security: disc; /* Hides text without telling Chrome it's a password */
+            -webkit-text-security: disc; 
         }
         #pass-input:focus { border-color: #444; background: #1a1a1a; }
         
+        /* Shake Animation for Wrong Code */
+        .shake { animation: shake 0.4s; border-color: #ff4444 !important; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
         .enter-btn { background: #eee; color: #111; border: none; padding: 10px 30px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; text-transform: lowercase; transition: 0.3s; }
         .enter-btn:hover { background: #fff; transform: scale(1.05); }
 
-        .chrome-warning { margin-top: 40px; font-size: 10px; color: #ff4444; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; opacity: 0.6; }
+        #error-msg { margin-top: 15px; font-size: 11px; color: #ff4444; text-transform: lowercase; font-weight: 600; opacity: 0; transition: 0.3s; }
+        .chrome-warning { position: absolute; bottom: 40px; font-size: 10px; color: #333; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
         #main-transfer { opacity: 0; transition: 1s; display: flex; flex-direction: column; align-items: center; }
         .transfer-btn { padding: 15px 40px; font-size: 14px; color: #888; background: #151515; border: 1px solid #222; border-radius: 10px; cursor: pointer; transition: 0.5s; font-weight: 600; text-transform: lowercase; }
@@ -34,9 +42,9 @@
     <div id="login-gate">
         <div class="gate-brand">gelly.</div>
         <div class="gate-label">enter code:</div>
-        <!-- autocomplete="off" tells Chrome not to save this -->
         <input type="text" id="pass-input" autocomplete="off" spellcheck="false">
         <button class="enter-btn" onclick="checkPass()">enter</button>
+        <div id="error-msg">invalid system code</div>
         <div class="chrome-warning">do not save password to chrome</div>
     </div>
 
@@ -46,13 +54,18 @@
 
     <script>
         function checkPass() {
-            const input = document.getElementById('pass-input').value;
-            if (input === 'gg55') {
+            const input = document.getElementById('pass-input');
+            const error = document.getElementById('error-msg');
+            
+            if (input.value === 'gg55') {
                 document.getElementById('login-gate').classList.add('unlocked');
                 document.getElementById('main-transfer').style.opacity = "1";
             } else {
-                alert('ACCESS DENIED');
-                document.getElementById('pass-input').value = '';
+                // Wrong Password Action
+                input.classList.add('shake');
+                error.style.opacity = "1";
+                input.value = '';
+                setTimeout(() => { input.classList.remove('shake'); }, 400);
             }
         }
         document.getElementById('pass-input').addEventListener("keyup", function(e) { if (e.keyCode === 13) checkPass(); });
@@ -164,6 +177,7 @@
                         let initialOrder = [];
                         function updateCount() { const count = document.getElementsByClassName('game-card').length; const display = document.getElementById('count-display'); if(display) display.innerText = count + " games available"; }
                         function showPage(pageId) { if (pageId !== 'sounds') { document.getElementById('game-frame').src = ''; } document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'none'; document.getElementById('sidebar').classList.remove('hidden'); document.querySelectorAll('.gelly-btn').forEach(b => { if (b.id !== 'back-btn') b.classList.remove('active'); }); let btn = document.getElementById('btn-' + pageId); if(btn) btn.classList.add('active'); document.getElementById(pageId).classList.add('active'); if(pageId === 'games') updateCount(); }
+                        
                         function openFrame(url, el) { 
                             var gameName = "system active"; 
                             if (el && el.querySelector('p')) { gameName = el.querySelector('p').innerText; } 
@@ -171,10 +185,19 @@
                             document.getElementById('game-display-name').innerText = gameName; 
                             document.getElementById('loading-overlay').style.display = 'flex'; 
                             document.getElementById('sidebar').classList.add('hidden'); 
+                            
                             var finalUrl = url;
-                            if (url.startsWith('./')) { finalUrl = "https://github.io" + url.substring(2); }
-                            else if (url.startsWith('https://')) { finalUrl = url; }
-                            setTimeout(() => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'flex'; document.getElementById('game-frame').src = finalUrl; }, 500); 
+                            if (url.startsWith('./')) {
+                                finalUrl = "https://github.io" + url.substring(2);
+                            } else if (url.startsWith('https://')) {
+                                finalUrl = url;
+                            }
+
+                            setTimeout(() => { 
+                                document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
+                                document.getElementById('player-container').style.display = 'flex'; 
+                                document.getElementById('game-frame').src = finalUrl; 
+                            }, 500); 
                         }
                         function hideLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
                         function closeFrame() { document.getElementById('game-frame').src = ''; document.getElementById('player-container').style.display = 'none'; document.getElementById('sidebar').classList.remove('hidden'); showPage('games'); }
