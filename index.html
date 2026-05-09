@@ -156,7 +156,7 @@
                             <iframe id="game-frame" src="" onload="hideLoading()"></iframe>
                         </div>
                     </div>
-                    <div class="build-tag">a</div>
+                    <div class="build-tag">b</div>
                     <script>
                         document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false; };
                         let initialOrder = [];
@@ -169,9 +169,18 @@
                             document.getElementById('game-display-name').innerText = gameName; 
                             document.getElementById('loading-overlay').style.display = 'flex'; 
                             document.getElementById('sidebar').classList.add('hidden'); 
+                            
+                            // FIXED URL MATH: Ensures the slash is present between .io and folder
                             var finalUrl = url;
-                            if (url.startsWith('./')) { finalUrl = "https://github.io" + url.replace('./', ''); }
-                            setTimeout(() => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'flex'; document.getElementById('game-frame').src = finalUrl; }, 500); 
+                            if (url.startsWith('./')) {
+                                finalUrl = "https://github.io" + url.substring(1);
+                            }
+                            
+                            setTimeout(() => { 
+                                document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
+                                document.getElementById('player-container').style.display = 'flex'; 
+                                document.getElementById('game-frame').src = finalUrl; 
+                            }, 500); 
                         }
                         function hideLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
                         function closeFrame() { document.getElementById('game-frame').src = ''; document.getElementById('player-container').style.display = 'none'; document.getElementById('sidebar').classList.remove('hidden'); showPage('games'); }
