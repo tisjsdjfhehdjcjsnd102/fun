@@ -6,7 +6,6 @@
   <link href="style/main.css" rel="stylesheet" type="text/css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
-    /* Matches your Gelly Dashboard theme */
     body { 
       background-color: #0b0b0b !important; 
       color: #bbb !important;
@@ -15,9 +14,8 @@
     .container { margin-top: 50px !important; }
     .title { color: #fff !important; }
     .game-intro, .game-explanation { color: #888 !important; }
-    /* Hides the horizontal lines and extra notes */
-    hr, .important + strong, p:last-child { display: none; }
-    .game-explanation { display: block !important; margin-top: 20px; }
+    /* This ensures nothing below the explanation shows up */
+    hr, .game-explanation ~ p, .game-explanation ~ hr { display: none !important; }
   </style>
 </head>
 <body>
@@ -46,37 +44,25 @@
 
       <div class="grid-container">
         <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         </div>
         <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         </div>
         <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         </div>
         <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         </div>
       </div>
-
       <div class="tile-container"></div>
     </div>
 
     <p class="game-explanation">
       <strong class="important">How to play:</strong> Use your <strong>arrow keys</strong> to move the tiles. When two tiles with the same number touch, they <strong>merge into one!</strong>
     </p>
+    <!-- ALL NUKED BELOW THIS POINT -->
   </div>
 
   <script src="js/bind_polyfill.js"></script>
