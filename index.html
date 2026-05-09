@@ -15,7 +15,7 @@
             --text: #eeeeee;
             --subtext: #777777;
             --panic: #ff4444;
-            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -33,7 +33,6 @@
             overflow: hidden;
         }
 
-        /* --- global cursor fix --- */
         button, .nav-item, .game-card, .game-card *, select, input {
             cursor: pointer;
         }
@@ -76,16 +75,26 @@
             height: 100vh;
             width: 100vw;
             display: flex;
+            overflow: hidden;
         }
 
         #sidebar {
             width: 260px;
+            min-width: 260px;
             background: var(--sidebar);
             border-right: 1px solid var(--secondary);
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        /* the rescaling logic */
+        .sidebar-hidden #sidebar {
+            margin-left: -260px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .brand {
@@ -123,6 +132,7 @@
             height: 100vh;
             overflow-y: auto;
             position: relative;
+            transition: var(--transition);
         }
 
         .section { display: none; animation: fadeIn 0.5s ease; height: 100%; }
@@ -130,11 +140,10 @@
         
         #home, #games { padding: 40px; }
 
-        /* --- soundboard --- */
         #sounds { width: 100%; height: 100%; padding: 0; }
         #sounds iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- grid & restored search bar --- */
+        /* --- grid --- */
         .controls { display: flex; gap: 15px; margin-bottom: 40px; }
         input, select {
             background: var(--secondary);
@@ -145,7 +154,7 @@
             outline: none;
             font-family: inherit;
         }
-        input#search { flex: 1; } /* restored full width flex */
+        input#search { flex: 1; }
 
         .grid {
             display: grid;
@@ -168,11 +177,15 @@
         /* --- player --- */
         #player {
             display: none;
-            position: fixed;
+            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg);
-            z-index: 10000;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
+
+        #player.active { display: block; opacity: 1; }
 
         .top-bar {
             height: 70px;
@@ -202,7 +215,6 @@
         }
 
         .hidden { display: none !important; }
-        .fade-sidebar { opacity: 0; transform: translateX(-20px); pointer-events: none; }
     </style>
 </head>
 <body>
@@ -219,7 +231,7 @@
             <div class="nav-item" onclick="tab('sounds', this)">soundboard</div>
         </div>
 
-        <div class="viewport">
+        <div class="viewport" id="viewport-main">
             <div id="home" class="section active">
                 <h1 style="font-size: 48px; font-weight: 900; margin-bottom: 5px;">gelly</h1>
                 <p style="color: var(--subtext); font-size: 18px;">welcomewelcome to uhhh idk</p>
@@ -239,21 +251,21 @@
             <div id="sounds" class="section">
                 <iframe src="soundboard/index.html"></iframe>
             </div>
-        </div>
-    </div>
 
-    <div id="player">
-        <div class="top-bar">
-            <button class="btn" onclick="closeGame()">back</button>
-            <div class="top-right">
-                <button class="btn btn-panic" onclick="panic()">panic</button>
-                <button class="btn" onclick="toggleFS()">fullscreen</button>
+            <div id="player">
+                <div class="top-bar">
+                    <button class="btn" onclick="closeGame()">back</button>
+                    <div class="top-right">
+                        <button class="btn btn-panic" onclick="panic()">panic</button>
+                        <button class="btn" onclick="toggleFS()">fullscreen</button>
+                    </div>
+                </div>
+                <iframe id="game-frame" src=""></iframe>
             </div>
         </div>
-        <iframe id="game-frame" src=""></iframe>
     </div>
 
-    <div id="version-tag">j</div>
+    <div id="version-tag">k</div>
 
     <script>
         const gameData = [
@@ -293,7 +305,6 @@
             ifr.src = window.location.href + "#cloaked";
             win.document.body.appendChild(ifr);
             window.close();
-            window.location.replace("about:blank");
         }
 
         if (window.self !== window.top || window.location.hash === "#cloaked") {
@@ -320,11 +331,11 @@
                 const div = document.createElement('div');
                 div.className = 'game-card';
                 div.onclick = () => {
-                    document.getElementById('sidebar').classList.add('fade-sidebar');
-                    setTimeout(() => {
-                        document.getElementById('player').style.display = 'block';
-                        document.getElementById('game-frame').src = `games/${g.id}/index.html`;
-                    }, 500);
+                    // Rescale animation trigger
+                    document.getElementById('main-ui').classList.add('sidebar-hidden');
+                    const player = document.getElementById('player');
+                    player.classList.add('active');
+                    document.getElementById('game-frame').src = `games/${g.id}/index.html`;
                 };
                 div.innerHTML = `<img src="icons/${g.img}"><span>${g.name}</span>`;
                 grid.appendChild(div);
@@ -332,9 +343,11 @@
         }
 
         function closeGame() {
-            document.getElementById('player').style.display = 'none';
-            document.getElementById('game-frame').src = '';
-            document.getElementById('sidebar').classList.remove('fade-sidebar');
+            document.getElementById('main-ui').classList.remove('sidebar-hidden');
+            document.getElementById('player').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('game-frame').src = '';
+            }, 600);
         }
 
         function toggleFS() {
