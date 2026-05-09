@@ -100,7 +100,8 @@
                             <div class="search-container">
                                 <input type="text" id="search" placeholder="Search library..." onkeyup="filterGames()">
                                 <select id="sort-filter" onchange="sortGames()">
-                                    <option value="az" selected>A-Z</option>
+                                    <option value="oldest" selected>Oldest</option>
+                                    <option value="az">A-Z</option>
                                     <option value="za">Z-A</option>
                                 </select>
                             </div>
@@ -120,7 +121,7 @@
                                 <div class="game-card" onclick="openFrame('./games/paperio2/index.html', this)"><img src="./icons/paperio2icon.png" alt="Paper.io 2"><p>Paper.io 2</p></div>
                                 <div class="game-card" onclick="openFrame('./games/vex4/index.html', this)"><img src="./icons/vex4icon.png" alt="Vex 4"><p>Vex 4</p></div>
                                 <div class="game-card" onclick="openFrame('./games/run3/index.html', this)"><img src="./icons/run3icon.png" alt="Run 3"><p>Run 3</p></div>
-                                <div class="game-card" onclick="openFrame('./games/dinogame/index.html', this)"><img src="./icons/dinogameicon.png" alt="Dino Game"><p>Dino Game</p></div>
+                                <div class="game-card" onclick="openFrame('./games/dino/index.html', this)"><img src="./icons/dinoicon.png" alt="Chrome Dino"><p>Chrome Dino</p></div>
                             </div>
                         </div>
 
@@ -146,6 +147,8 @@
                     </div>
 
                     <script>
+                        let initialOrder = [];
+                        
                         function updateCount() { const count = document.getElementsByClassName('game-card').length; const display = document.getElementById('count-display'); if(display) display.innerText = count + " Games Available"; }
                         function showPage(pageId) { if (pageId !== 'sounds') { document.getElementById('game-frame').src = ''; } document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'none'; document.getElementById('sidebar').classList.remove('hidden'); document.querySelectorAll('.gelly-btn').forEach(b => { if (b.id !== 'back-btn') b.classList.remove('active'); }); let btn = document.getElementById('btn-' + pageId); if(btn) btn.classList.add('active'); document.getElementById(pageId).classList.add('active'); if(pageId === 'games') updateCount(); }
                         function openFrame(url, el) { var gameName = "System Active"; if (el && el.querySelector('p')) { gameName = el.querySelector('p').innerText; } else if (el && el.innerText.includes('Launch')) { gameName = "Soundboard"; } document.getElementById('game-display-name').innerText = gameName; document.getElementById('loading-overlay').style.display = 'flex'; document.getElementById('sidebar').classList.add('hidden'); setTimeout(() => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'flex'; document.getElementById('game-frame').src = url; }, 500); }
@@ -159,6 +162,12 @@
                             const grid = document.getElementById('gameGrid'); 
                             const cards = Array.from(grid.getElementsByClassName('game-card')); 
                             const mode = document.getElementById('sort-filter').value; 
+                            
+                            if (mode === 'oldest') {
+                                initialOrder.forEach(card => grid.appendChild(card));
+                                return;
+                            }
+
                             cards.sort((a, b) => { 
                                 const nameA = a.querySelector('p').innerText.toLowerCase(); 
                                 const nameB = b.querySelector('p').innerText.toLowerCase(); 
@@ -168,8 +177,9 @@
                             cards.forEach(card => grid.appendChild(card)); 
                         }
 
-                        // This auto-sorts to A-Z and updates count immediately on launch
                         setTimeout(() => {
+                            const grid = document.getElementById('gameGrid');
+                            initialOrder = Array.from(grid.getElementsByClassName('game-card'));
                             sortGames();
                             updateCount();
                         }, 100);
