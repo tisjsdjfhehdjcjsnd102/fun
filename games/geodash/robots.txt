@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://geometrydash-lite2.github.io/sitemap.xml
