@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gelly Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>gelly</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f0f0f;
-            --card: #1a1a1a;
-            --accent: #7c4dff;
+            --bg: #080808;
+            --card: #121212;
+            --accent: #00ff88;
             --text: #ffffff;
+            --subtext: #a0a0a0;
         }
 
         body {
@@ -18,125 +19,143 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* --- Landing Screen --- */
         #landing {
             height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #0f0f0f, #1a1a1a);
+            text-align: center;
         }
 
         .transfer-btn {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
-            padding: 10px 20px;
-            background: var(--accent);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: var(--subtext);
+            font-size: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: 0.2s;
         }
 
-        /* --- Main UI --- */
-        #main-ui { display: none; padding-top: 70px; }
+        .transfer-btn:hover { border-color: var(--accent); color: var(--text); }
+
+        h1.logo { font-size: 80px; font-weight: 900; letter-spacing: -4px; margin: 0; }
+
+        /* --- Main App UI --- */
+        #app-ui { display: none; height: 100vh; flex-direction: column; }
 
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
             height: 60px;
-            background: rgba(26, 26, 26, 0.9);
-            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            z-index: 100;
+            gap: 40px;
+            border-bottom: 1px solid #1a1a1a;
+            background: #080808;
         }
 
         nav button {
             background: none;
             border: none;
-            color: #aaa;
-            font-size: 16px;
+            color: var(--subtext);
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
+            text-transform: lowercase;
+            font-size: 16px;
         }
 
-        nav button:hover, nav button.active { color: var(--accent); }
+        nav button:hover { color: var(--accent); }
+        .panic-link { color: #ff4444 !important; }
 
-        .panic-btn { color: #ff4d4d !important; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px 20px; }
 
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
-
-        /* --- Games Grid --- */
-        .controls {
+        /* --- Games Section --- */
+        .search-bar {
+            max-width: 800px;
+            margin: 0 auto 40px;
             display: flex;
             gap: 10px;
-            margin-bottom: 30px;
         }
 
-        #search {
+        #game-search {
             flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #222;
-            color: white;
-        }
-
-        #filter {
-            padding: 10px;
-            background: #222;
-            color: white;
-            border-radius: 8px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .game-card {
-            background: var(--card);
+            padding: 12px 20px;
             border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
+            border: 1px solid #222;
+            background: #111;
+            color: white;
+            outline: none;
         }
 
-        .game-card:hover { transform: translateY(-5px); border: 1px solid var(--accent); }
+        #sort-filter {
+            padding: 10px;
+            background: #111;
+            color: white;
+            border: 1px solid #222;
+            border-radius: 12px;
+        }
 
-        .game-card img { width: 100%; border-radius: 8px; margin-bottom: 10px; aspect-ratio: 1/1; object-fit: cover; }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-        /* --- Game Player --- */
-        #player-overlay {
+        .game-item {
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .game-item:hover { transform: translateY(-5px); }
+
+        .game-item img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            background: #1a1a1a;
+        }
+
+        .game-item span { font-weight: 600; font-size: 14px; color: var(--subtext); }
+
+        /* --- Player Overlay --- */
+        #player {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
         }
 
-        .player-bar {
+        .player-nav {
             height: 50px;
-            background: #111;
+            background: #0a0a0a;
             display: flex;
             align-items: center;
             padding: 0 20px;
             gap: 15px;
+        }
+
+        .player-nav button {
+            background: #1a1a1a;
+            border: none;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         iframe { width: 100%; height: calc(100% - 50px); border: none; }
@@ -147,143 +166,141 @@
 <body>
 
     <div id="landing">
-        <button class="transfer-btn" onclick="transferSite()">Transfer</button>
-        <h1>Welcome to Gelly</h1>
+        <button class="transfer-btn" onclick="transfer()">transfer</button>
+        <h1 class="logo">gelly</h1>
+        <p style="color: var(--subtext);">press transfer to start</p>
     </div>
 
-    <div id="main-ui">
+    <div id="app-ui">
         <nav>
-            <button onclick="showSection('home')">Home</button>
-            <button onclick="showSection('games')">Games</button>
-            <button onclick="showSection('soundboard')">Soundboard</button>
-            <button class="panic-btn" onclick="panic()">Panic</button>
+            <button onclick="tab('home')">home</button>
+            <button onclick="tab('games')">games</button>
+            <button onclick="tab('soundboard')">soundboard</button>
+            <button class="panic-link" onclick="panic()">panic</button>
         </nav>
 
-        <div class="container">
-            <section id="home-sec">
-                <h1 style="color: var(--accent);">Gelly</h1>
-                <p>Welcome to Gelly. Your central hub for games and sounds, built for speed and privacy. Use the navigation bar above to explore.</p>
-            </section>
+        <div class="content-area">
+            <div id="home-pg">
+                <h2 style="font-size: 40px; color: var(--accent);">gelly</h2>
+                <p style="max-width: 500px; line-height: 1.6; color: var(--subtext);">
+                    a simple, clean web directory for games and tools. 
+                    no tracking, no fluff, just gelly.
+                </p>
+            </div>
 
-            <section id="games-sec" class="hidden">
-                <div class="controls">
-                    <input type="text" id="search" placeholder="Search games..." oninput="renderGames()">
-                    <select id="filter" onchange="renderGames()">
-                        <option value="az">A-Z</option>
-                        <option value="za">Z-A</option>
+            <div id="games-pg" class="hidden">
+                <div class="search-bar">
+                    <input type="text" id="game-search" placeholder="search games..." oninput="drawGames()">
+                    <select id="sort-filter" onchange="drawGames()">
+                        <option value="az">a-z</option>
+                        <option value="za">z-a</option>
                     </select>
                 </div>
-                <div class="grid" id="game-grid"></div>
-            </section>
+                <div class="game-grid" id="grid"></div>
+            </div>
 
-            <section id="soundboard-sec" class="hidden">
-                <iframe src="soundboard/index.html" style="height: 80vh; border-radius: 15px;"></iframe>
-            </section>
+            <div id="soundboard-pg" class="hidden">
+                <iframe src="soundboard/index.html" style="height: 70vh; border-radius: 20px;"></iframe>
+            </div>
         </div>
     </div>
 
-    <div id="player-overlay">
-        <div class="player-bar">
-            <button onclick="closeGame()">← Back</button>
-            <button onclick="toggleFS()">Fullscreen</button>
-            <button class="panic-btn" onclick="panic()">Panic</button>
-            <span id="game-title" style="margin-left: auto; font-weight: bold;"></span>
+    <div id="player">
+        <div class="player-nav">
+            <button onclick="closeGame()">back</button>
+            <button onclick="toggleFS()">fullscreen</button>
+            <button onclick="panic()" style="color: #ff4444;">panic</button>
+            <span id="active-title" style="margin-left: auto; font-weight: bold; color: var(--accent);"></span>
         </div>
-        <iframe id="game-frame" src=""></iframe>
+        <iframe id="game-view" src=""></iframe>
     </div>
 
     <script>
-        const games = [
-            { name: "2048", folder: "2048", icon: "icons/2048icon.png" },
-            { name: "Bitlife", folder: "bitlife", icon: "icons/bitlifeicon.png" },
-            { name: "Cookie Clicker", folder: "cookieclicker", icon: "icons/cookieclickericon.png" },
-            { name: "Crossy Road", folder: "crossyroad", icon: "icons/crossyroadicon.png" },
-            { name: "Dino Game", folder: "dinogame", icon: "icons/dinogameicon.png" },
-            { name: "Doodle Jump", folder: "doodlejump", icon: "icons/doodlejumpicon.png" },
-            { name: "Drive Mad", folder: "drivemad", icon: "icons/drivemadicon.png" },
-            { name: "Duck Life", folder: "ducklife", icon: "icons/ducklifeicon.png" },
-            { name: "Flappy Bird", folder: "flappy", icon: "icons/flappybirdicon.png" },
-            { name: "Geometry Dash", folder: "geodash", icon: "icons/geodashicon.png" },
-            { name: "Minecraft", folder: "minecraft", icon: "icons/minecrafticon.png" },
-            { name: "Paper.io 2", folder: "paperio2", icon: "icons/paperio2icon.png" },
-            { name: "Red Ball", folder: "redball", icon: "icons/redballicon.png" },
-            { name: "Run 3", folder: "run3", icon: "icons/run3icon.png" },
-            { name: "Slope", folder: "slope", icon: "icons/slopeicon.png" },
-            { name: "Stickman Hook", folder: "stickmanhook", icon: "icons/stickmanhookicon.png" },
-            { name: "Tetris", folder: "tetris", icon: "icons/tetrisicon.png" },
-            { name: "Vex 4", folder: "vex4", icon: "icons/vex4icon.png" }
+        const catalog = [
+            { name: "2048", slug: "2048", img: "2048icon.png" },
+            { name: "bitlife", slug: "bitlife", img: "bitlifeicon.png" },
+            { name: "cookie clicker", slug: "cookieclicker", img: "cookieclickericon.png" },
+            { name: "crossy road", slug: "crossyroad", img: "crossyroadicon.png" },
+            { name: "dino game", slug: "dinogame", img: "dinogameicon.png" },
+            { name: "doodle jump", slug: "doodlejump", img: "doodlejumpicon.png" },
+            { name: "drive mad", slug: "drivemad", img: "drivemadicon.png" },
+            { name: "duck life", slug: "ducklife", img: "ducklifeicon.png" },
+            { name: "flappy bird", slug: "flappy", img: "flappybirdicon.png" },
+            { name: "geometry dash", slug: "geodash", img: "geodashicon.png" },
+            { name: "minecraft", slug: "minecraft", img: "minecrafticon.png" },
+            { name: "paper.io 2", slug: "paperio2", img: "paperio2icon.png" },
+            { name: "red ball", slug: "redball", img: "redballicon.png" },
+            { name: "run 3", slug: "run3", img: "run3icon.png" },
+            { name: "slope", slug: "slope", img: "slopeicon.png" },
+            { name: "stickman hook", slug: "stickmanhook", img: "stickmanhookicon.png" },
+            { name: "tetris", slug: "tetris", img: "tetrisicon.png" },
+            { name: "vex 4", slug: "vex4", img: "vex4icon.png" }
         ];
 
-        function transferSite() {
-            // This opens the current site inside a blank page
-            const url = window.location.href;
-            const win = window.open();
+        function transfer() {
+            let win = window.open();
+            if (!win) {
+                alert("Pop-up blocked! Allow pop-ups to use about:blank mode.");
+                initUI();
+                return;
+            }
             win.document.body.style.margin = '0';
             win.document.body.style.height = '100vh';
-            const iframe = win.document.createElement('iframe');
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.src = url;
-            win.document.body.appendChild(iframe);
-            
-            // Show the main UI in the original window too
-            document.getElementById('landing').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'block';
+            let ifr = win.document.createElement('iframe');
+            ifr.style = "border:none; width:100%; height:100%;";
+            ifr.src = window.location.href;
+            win.document.body.appendChild(ifr);
+            window.location.replace("https://classroom.google.com");
         }
 
-        function showSection(id) {
-            document.getElementById('home-sec').classList.add('hidden');
-            document.getElementById('games-sec').classList.add('hidden');
-            document.getElementById('soundboard-sec').classList.add('hidden');
-            document.getElementById(id + '-sec').classList.remove('hidden');
+        function initUI() {
+            document.getElementById('landing').classList.add('hidden');
+            document.getElementById('app-ui').style.display = 'flex';
         }
 
-        function renderGames() {
-            const grid = document.getElementById('game-grid');
-            const search = document.getElementById('search').value.toLowerCase();
-            const sort = document.getElementById('filter').value;
-            
-            let filtered = games.filter(g => g.name.toLowerCase().includes(search));
-            
-            if (sort === 'az') filtered.sort((a, b) => a.name.localeCompare(b.name));
-            else filtered.sort((a, b) => b.name.localeCompare(a.name));
+        if (window.self !== window.top) initUI();
+
+        function tab(name) {
+            ['home-pg', 'games-pg', 'soundboard-pg'].forEach(p => document.getElementById(p).classList.add('hidden'));
+            document.getElementById(name + '-pg').classList.remove('hidden');
+        }
+
+        function drawGames() {
+            const grid = document.getElementById('grid');
+            const query = document.getElementById('game-search').value.toLowerCase();
+            const sort = document.getElementById('sort-filter').value;
+
+            let list = catalog.filter(g => g.name.toLowerCase().includes(query));
+            list.sort((a, b) => sort === 'az' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
 
             grid.innerHTML = '';
-            filtered.forEach(game => {
-                const div = document.createElement('div');
-                div.className = 'game-card';
-                div.onclick = () => openGame(game);
-                div.innerHTML = `
-                    <img src="${game.icon}" alt="${game.name}">
-                    <div>${game.name}</div>
-                `;
-                grid.appendChild(div);
+            list.forEach(g => {
+                const el = document.createElement('div');
+                el.className = 'game-item';
+                el.onclick = () => {
+                    document.getElementById('player').style.display = 'block';
+                    document.getElementById('game-view').src = `games/${g.slug}/index.html`;
+                    document.getElementById('active-title').innerText = g.name;
+                };
+                el.innerHTML = `<img src="icons/${g.img}"><span>${g.name}</span>`;
+                grid.appendChild(el);
             });
         }
 
-        function openGame(game) {
-            document.getElementById('player-overlay').style.display = 'block';
-            document.getElementById('game-frame').src = `games/${game.folder}/index.html`;
-            document.getElementById('game-title').innerText = game.name;
-        }
-
         function closeGame() {
-            document.getElementById('player-overlay').style.display = 'none';
-            document.getElementById('game-frame').src = '';
+            document.getElementById('player').style.display = 'none';
+            document.getElementById('game-view').src = '';
         }
 
-        function panic() {
-            window.location.href = 'https://classroom.google.com';
-        }
-
+        function panic() { window.location.href = "https://classroom.google.com"; }
+        
         function toggleFS() {
-            const frame = document.getElementById('game-frame');
-            if (frame.requestFullscreen) frame.requestFullscreen();
+            const v = document.getElementById('game-view');
+            if (v.requestFullscreen) v.requestFullscreen();
+            else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
         }
 
-        // Initial Load
-        renderGames();
+        drawGames();
     </script>
 </body>
 </html>
