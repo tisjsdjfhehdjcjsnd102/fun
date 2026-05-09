@@ -35,11 +35,9 @@
     </div>
 
     <script>
-        // FULL LOCKDOWN: Blocks Inspect Element keyboard shortcuts
+        // LOCKDOWN SCRIPT (Original Tab)
         document.onkeydown = function(e) {
-            if (e.keyCode == 123 || 
-                (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || 
-                (e.ctrlKey && e.keyCode == 85)) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
                 return false;
             }
         };
@@ -163,6 +161,12 @@
                         </div>
                     </div>
                     <script>
+                        // LOCKDOWN SCRIPT (Portal)
+                        document.onkeydown = function(e) {
+                            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
+                                return false;
+                            }
+                        };
                         let initialOrder = [];
                         function updateCount() { const count = document.getElementsByClassName('game-card').length; const display = document.getElementById('count-display'); if(display) display.innerText = count + " games available"; }
                         function showPage(pageId) { if (pageId !== 'sounds') { document.getElementById('game-frame').src = ''; } document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('player-container').style.display = 'none'; document.getElementById('sidebar').classList.remove('hidden'); document.querySelectorAll('.gelly-btn').forEach(b => { if (b.id !== 'back-btn') b.classList.remove('active'); }); let btn = document.getElementById('btn-' + pageId); if(btn) btn.classList.add('active'); document.getElementById(pageId).classList.add('active'); if(pageId === 'games') updateCount(); }
@@ -191,7 +195,6 @@
             `;
             doc.write(html);
             doc.close();
-            window.location.replace('https://google.com');
         };
     </script>
 </body>
