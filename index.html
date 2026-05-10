@@ -125,6 +125,15 @@
             color: var(--accent);
         }
 
+        /* RESTORED FOOTER STYLE */
+        .sidebar-footer {
+            padding: 10px;
+            font-size: 11px;
+            color: #222;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
         .viewport {
             flex: 1;
             height: 100vh;
@@ -140,6 +149,33 @@
         #home p { color: var(--subtext); font-size: 18px; margin-left: 4px; }
 
         #games { padding: 40px; }
+
+        .counter-label {
+            font-size: 12px;
+            color: var(--subtext);
+            font-weight: 600;
+            margin-bottom: 15px; /* Increased spacing */
+            padding-left: 5px;
+            display: block;
+        }
+
+        .controls { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 50px; /* Increased margin to separate from icons */
+        }
+
+        input, select {
+            background: var(--secondary);
+            border: none;
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 12px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        #search { flex: 1; } /* Extended search bar */
 
         .settings-group {
             max-width: 500px;
@@ -181,20 +217,9 @@
 
         .save-btn {
             background: var(--secondary) !important;
-            color: #ffffff !important; /* Fixed white text */
+            color: #ffffff !important;
             width: auto !important;
             padding: 12px 25px !important;
-        }
-
-        input, select {
-            background: var(--secondary);
-            border: none;
-            color: var(--text);
-            padding: 12px 20px;
-            border-radius: 12px;
-            outline: none;
-            font-family: inherit;
-            width: 100%;
         }
 
         .grid {
@@ -258,7 +283,7 @@
                 <div class="nav-item" onclick="tab('sounds', this)">soundboard</div>
                 <div class="nav-item" onclick="tab('settings', this)">settings</div>
             </div>
-            <div class="sidebar-footer">v3.0</div>
+            <div class="sidebar-footer">v3.1</div>
         </div>
 
         <div class="viewport" id="viewport-main">
@@ -268,9 +293,9 @@
             </div>
 
             <div id="games" class="section">
-                <span class="counter-label" id="game-count" style="display:block; padding-left:5px; margin-bottom:5px; color:var(--subtext); font-size:12px; font-weight:600;">loading...</span>
+                <span class="counter-label" id="game-count">loading...</span>
                 <div class="controls">
-                    <input type="text" id="search" placeholder="search..." oninput="draw()" style="flex:1; width:auto;">
+                    <input type="text" id="search" placeholder="search..." oninput="draw()">
                     <select id="sort" onchange="draw()" style="width: auto;">
                         <option value="az">a-z</option>
                         <option value="za">z-a</option>
@@ -351,7 +376,6 @@
         const settingsFooter = document.getElementById('settings-footer');
         const soundFrame = document.getElementById('sound-frame');
 
-        // Init
         function init() {
             panicInput.value = savedPanicUrl;
             themeSelect.value = savedTheme;
@@ -381,7 +405,7 @@
             localStorage.setItem('gelly-panic', savedPanicUrl);
             localStorage.setItem('gelly-theme', savedTheme);
             settingsFooter.classList.remove('visible');
-            updateSoundboardPath(savedTheme); // Refresh board on save
+            updateSoundboardPath(savedTheme);
         }
 
         function resetUnsaved() {
