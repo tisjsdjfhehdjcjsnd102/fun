@@ -64,7 +64,7 @@
             font-weight: 600; 
             transition: var(--transition);
             font-family: inherit;
-            display: none; /* Hidden until code is typed */
+            display: none; 
         }
         
         .transfer-btn:hover { 
@@ -175,7 +175,7 @@
                 <button class="nav-item" onclick="tab('sounds', this)">soundboard</button>
                 <button class="nav-item" onclick="tab('settings', this)">settings</button>
             </div>
-            <div class="sidebar-footer">v4.9</div>
+            <div class="sidebar-footer">v5.0</div>
         </div>
 
         <div class="viewport">
@@ -236,8 +236,8 @@
     </div>
 
     <script>
-        // Secret Code Logic
-        let keys = "";
+        // Updated Secret Code Logic
+        let inputSequence = "";
         document.addEventListener('keydown', function(e) {
             // Existing shortcut disables
             if (e.ctrlKey && (e.shiftKey && e.keyCode === 73)) e.preventDefault(); 
@@ -245,11 +245,15 @@
             if (e.ctrlKey && e.keyCode === 85) e.preventDefault(); 
             if (e.keyCode === 123) e.preventDefault(); 
 
-            // Secret Code Detection
-            keys += e.key;
-            if (keys.length > 4) keys = keys.substring(keys.length - 4);
-            if (keys === "gg55") {
-                document.getElementById('secret-btn').style.display = 'block';
+            // Strict 4-character reset logic
+            inputSequence += e.key.toLowerCase();
+            
+            if (inputSequence.length === 4) {
+                if (inputSequence === "gg55") {
+                    document.getElementById('secret-btn').style.display = 'block';
+                }
+                // Always clear after 4 characters regardless of success
+                inputSequence = "";
             }
         });
 
