@@ -74,11 +74,12 @@
         }
 
         #main-ui {
-            display: none;
+            display: flex;
             height: 100vh;
             width: 100vw;
-            display: flex;
             overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         #sidebar {
@@ -91,6 +92,13 @@
             padding: 30px 20px;
             transition: var(--transition);
             z-index: 10;
+            margin-left: 0;
+        }
+
+        /* Fixed Smooth Sidebar Exit */
+        .sidebar-hidden #sidebar {
+            margin-left: -260px;
+            opacity: 0;
         }
 
         .brand {
@@ -125,7 +133,6 @@
             color: var(--accent);
         }
 
-        /* RESTORED FOOTER STYLE */
         .sidebar-footer {
             padding: 10px;
             font-size: 11px;
@@ -139,6 +146,7 @@
             height: 100vh;
             overflow-y: auto;
             position: relative;
+            transition: var(--transition);
         }
 
         .section { display: none; animation: fadeIn 0.5s ease; height: 100%; position: relative; }
@@ -154,7 +162,7 @@
             font-size: 12px;
             color: var(--subtext);
             font-weight: 600;
-            margin-bottom: 15px; /* Increased spacing */
+            margin-bottom: 15px;
             padding-left: 5px;
             display: block;
         }
@@ -162,7 +170,7 @@
         .controls { 
             display: flex; 
             gap: 15px; 
-            margin-bottom: 50px; /* Increased margin to separate from icons */
+            margin-bottom: 50px;
         }
 
         input, select {
@@ -175,21 +183,7 @@
             font-family: inherit;
         }
 
-        #search { flex: 1; } /* Extended search bar */
-
-        .settings-group {
-            max-width: 500px;
-            margin-bottom: 40px;
-        }
-        
-        .settings-label {
-            display: block;
-            color: var(--subtext);
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            padding-left: 5px;
-        }
+        #search { flex: 1; }
 
         .settings-footer {
             position: absolute;
@@ -247,7 +241,7 @@
             background: var(--bg);
             z-index: 20;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         #player.active { display: block; opacity: 1; }
@@ -283,7 +277,7 @@
                 <div class="nav-item" onclick="tab('sounds', this)">soundboard</div>
                 <div class="nav-item" onclick="tab('settings', this)">settings</div>
             </div>
-            <div class="sidebar-footer">v3.1</div>
+            <div class="sidebar-footer">v3.2</div>
         </div>
 
         <div class="viewport" id="viewport-main">
@@ -310,24 +304,9 @@
 
             <div id="settings" class="section">
                 <h1>settings</h1>
-                
-                <div class="settings-group">
-                    <span class="settings-label">theme</span>
-                    <select id="theme-select" onchange="previewTheme(this.value)">
-                        <option value="dark">dark</option>
-                        <option value="light">light</option>
-                    </select>
-                </div>
-
-                <div class="settings-group">
-                    <span class="settings-label">panic url</span>
-                    <input type="text" id="panic-input" placeholder="https://google.com" oninput="checkSettings()">
-                </div>
-
-                <div id="settings-footer" class="settings-footer">
-                    <div class="warning-text">press save to apply these settings</div>
-                    <button class="btn save-btn" onclick="saveSettings()">save settings</button>
-                </div>
+                <div class="settings-group"><span class="settings-label">theme</span><select id="theme-select" onchange="previewTheme(this.value)"><option value="dark">dark</option><option value="light">light</option></select></div>
+                <div class="settings-group"><span class="settings-label">panic url</span><input type="text" id="panic-input" placeholder="https://google.com" oninput="checkSettings()"></div>
+                <div id="settings-footer" class="settings-footer"><div class="warning-text">press save to apply these settings</div><button class="btn save-btn" onclick="saveSettings()">save settings</button></div>
             </div>
 
             <div id="player">
@@ -371,6 +350,7 @@
         let savedPanicUrl = localStorage.getItem('gelly-panic') || 'https://google.com';
         let savedTheme = localStorage.getItem('gelly-theme') || 'dark';
 
+        const mainUI = document.getElementById('main-ui');
         const panicInput = document.getElementById('panic-input');
         const themeSelect = document.getElementById('theme-select');
         const settingsFooter = document.getElementById('settings-footer');
@@ -439,8 +419,8 @@
 
         if (window.self !== window.top || window.location.hash === "#cloaked") {
             document.getElementById('landing').classList.add('hidden');
-            document.getElementById('main-ui').classList.remove('hidden');
-            document.getElementById('main-ui').style.display = 'flex';
+            mainUI.classList.remove('hidden');
+            mainUI.style.opacity = '1';
         }
 
         function draw() {
@@ -456,7 +436,7 @@
                 const div = document.createElement('div');
                 div.className = 'game-card';
                 div.onclick = () => {
-                    document.getElementById('main-ui').classList.add('sidebar-hidden');
+                    mainUI.classList.add('sidebar-hidden');
                     document.getElementById('player').classList.add('active');
                     document.getElementById('game-frame').src = `games/${g.id}/index.html`;
                 };
@@ -466,7 +446,7 @@
         }
 
         function closeGame() {
-            document.getElementById('main-ui').classList.remove('sidebar-hidden');
+            mainUI.classList.remove('sidebar-hidden');
             document.getElementById('player').classList.remove('active');
             setTimeout(() => { document.getElementById('game-frame').src = ''; }, 600);
         }
