@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Beginner's Guide to Eggy Car - Eggy Car Guide | eggy-car.online</title>
+    <meta name="description" content="Master Eggy Car with our comprehensive beginner's guide. Learn basic controls, strategies, and tips to improve your gameplay.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🥚</text></svg>">
+    
+    <style>
+        :root {
+            --primary-color: #ff7e00;
+            --secondary-color: #ffd100;
+            --text-color: #333;
+            --light-bg: #fff;
+            --dark-bg: #222;
+            --dark-text: #eee;
+            --card-bg: #f8f8f8;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --header-height: 70px;
+            --max-width: 1200px;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--light-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo span {
+            margin-left: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: var(--header-height);
+            padding: 60px 0;
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius);
+        }
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .article-content h2 {
+            color: var(--primary-color);
+            margin: 30px 0 15px;
+            font-size: 1.8rem;
+        }
+
+        .article-content h3 {
+            color: var(--text-color);
+            margin: 25px 0 12px;
+            font-size: 1.4rem;
+        }
+
+        .article-content p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .article-content li {
+            margin-bottom: 8px;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: var(--header-height);
+                left: 0;
+                width: 100%;
+                background-color: var(--light-bg);
+                flex-direction: column;
+                padding: 20px 0;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .article-header h1 {
+                font-size: 2rem;
+            }
+
+            .logo span {
+                display: none;
+            }
+        }
+
+        /* Font Awesome icons */
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .fa-egg:before {
+            content: "🥚";
+        }
+
+        .fa-car:before {
+            content: "🚗";
+        }
+
+        .fa-bars:before {
+            content: "☰";
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #222;
+            color: #eee;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            color: #ff7e00;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #eee;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../" class="logo">
+                    <i class="fa fa-egg"></i><i class="fa fa-car"></i>
+                    <span>Eggy Car</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../#play">Play Game</a></li>
+                    <li><a href="../#guides">Guides</a></li>
+                    <li><a href="../#features">Features</a></li>
+                    <li><a href="../#how-to-play">How to Play</a></li>
+                    <li><a href="../#faq">FAQ</a></li>
+                </ul>
+                <div>
+                    <div class="mobile-menu">
+                        <i class="fa fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="article-header">
+                <h1>Complete Beginner's Guide to Eggy Car</h1>
+            </div>
+
+            <article class="article-content">
+                <h2>Getting Started with Eggy Car</h2>
+                <p>Welcome to our comprehensive guide for Eggy Car! Whether you're a complete beginner or looking to improve your skills, this guide will help you master the game's mechanics and achieve higher scores.</p>
+
+                <h2>Basic Controls</h2>
+                <p>Eggy Car features simple but precise controls:</p>
+                <ul>
+                    <li><strong>Right Arrow or D:</strong> Accelerate forward</li>
+                    <li><strong>Left Arrow or A:</strong> Accelerate backward</li>
+                    <li><strong>Spacebar:</strong> Reset the level (if stuck)</li>
+                </ul>
+
+                <h2>Core Game Mechanics</h2>
+                <h3>Physics and Balance</h3>
+                <p>The key to success in Eggy Car is understanding the physics system:</p>
+                <ul>
+                    <li>Your car's balance affects the egg's stability</li>
+                    <li>Speed management is crucial when approaching hills</li>
+                    <li>Smooth acceleration and deceleration prevent the egg from falling</li>
+                </ul>
+
+                <h3>Collecting Coins</h3>
+                <p>Coins serve multiple purposes in the game:</p>
+                <ul>
+                    <li>Purchase new vehicles with different characteristics</li>
+                    <li>Unlock special abilities and power-ups</li>
+                    <li>Achieve higher scores and compete with others</li>
+                </ul>
+
+                <h2>Tips for Beginners</h2>
+                <ol>
+                    <li>Start slow and focus on maintaining balance</li>
+                    <li>Learn each level's terrain before attempting speed runs</li>
+                    <li>Use gentle taps for precise control</li>
+                    <li>Practice makes perfect - don't get discouraged!</li>
+                </ol>
+
+                <h2>Common Mistakes to Avoid</h2>
+                <ul>
+                    <li>Rushing through levels without planning</li>
+                    <li>Accelerating too quickly on hills</li>
+                    <li>Ignoring the terrain ahead</li>
+                    <li>Not collecting coins for upgrades</li>
+                </ul>
+
+                <h2>Next Steps</h2>
+                <p>Once you've mastered these basics, check out our <a href="advanced-eggy-car-strategies.html">Advanced Eggy Car Strategies</a> guide to take your game to the next level!</p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Eggy Car</h3>
+                    <ul class="footer-links">
+                        <li><a href="../#play">Play Game</a></li>
+                        <li><a href="../#guides">Guides</a></li>
+                        <li><a href="../#features">Features</a></li>
+                        <li><a href="../#how-to-play">How to Play</a></li>
+                        <li><a href="../#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>More Games</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Popular Games</a></li>
+                        <li><a href="#">New Games</a></li>
+                        <li><a href="#">Racing Games</a></li>
+                        <li><a href="#">Skill Games</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 eggy-car.online. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html> 
