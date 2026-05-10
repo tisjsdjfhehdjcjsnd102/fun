@@ -8,19 +8,19 @@
     <style>
         :root {
             --bg: #0b0b0b;
-            --sidebar: #080808;
+            --nav: #080808;
             --card: #141414;
             --accent: #ffffff;
             --secondary: #1e1e1e;
             --text: #eeeeee;
             --subtext: #777777;
             --panic: #ff4444;
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         [data-theme="light"] {
             --bg: #ffffff;
-            --sidebar: #f5f5f5;
+            --nav: #f5f5f5;
             --card: #eeeeee;
             --accent: #000000;
             --secondary: #e0e0e0;
@@ -28,152 +28,59 @@
             --subtext: #666666;
         }
 
-        * { box-sizing: border-box; text-transform: lowercase; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-
-        body, html {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            transition: background-color 0.3s ease;
-            cursor: default;
-        }
-
-        button, .nav-item, .game-card, .game-card *, select, .save-btn, .btn-action, .transfer-btn, .fav-btn, .filter-fav-btn {
-            cursor: pointer !important;
-        }
-
-        #landing {
-            height: 100vh; width: 100vw;
-            display: flex; background: #0b0b0b;
-            position: fixed; top: 0; left: 0;
-            z-index: 9999;
-        }
-
-        /* Tiny Secret Progress Dots */
-        #code-dots {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            display: flex;
-            gap: 4px;
-            z-index: 10000;
-            pointer-events: none;
-        }
-
-        .dot {
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .transfer-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 12px 18px; 
-            background: none;
-            border: none; 
-            color: var(--subtext);
-            border-radius: 12px; 
-            font-size: 14px;
-            font-weight: 600; 
-            transition: var(--transition);
-            font-family: inherit;
-            display: none; 
-        }
+        * { box-sizing: border-box; text-transform: lowercase; user-select: none; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
-        .transfer-btn:hover { 
-            background: var(--secondary);
-            color: var(--accent); 
+        /* Top Navigation */
+        #navbar {
+            height: 70px; background: var(--nav); border-bottom: 1px solid var(--secondary);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; position: fixed; top: 0; width: 100%; z-index: 100;
+            transition: transform 0.4s ease;
         }
 
-        #main-ui { display: none; height: 100vh; width: 100vw; overflow: hidden; opacity: 0; transition: opacity 0.5s ease; }
-
-        #sidebar {
-            width: 260px; min-width: 260px;
-            background: var(--sidebar); border-right: 1px solid var(--secondary);
-            display: flex; flex-direction: column;
-            padding: 30px 20px; transition: var(--transition);
-            z-index: 10;
-        }
-
-        .sidebar-hidden #sidebar { margin-left: -260px; opacity: 0; }
-
-        .brand { font-size: 24px; font-weight: 900; margin-bottom: 50px; padding-left: 10px; letter-spacing: -1px; color: var(--accent); }
-        .nav-items { flex: 1; }
-        .nav-item {
-            padding: 12px 18px; margin-bottom: 8px; border-radius: 12px;
-            color: var(--subtext); background: none; border: none;
-            transition: var(--transition); font-weight: 600; text-align: left;
-            font-size: 14px; display: block; width: 100%;
-            font-family: inherit;
-        }
-        .nav-item:hover, .nav-item.active { background: var(--secondary); color: var(--accent); }
+        .nav-left, .nav-right { display: flex; gap: 10px; align-items: center; }
         
-        .sidebar-footer { padding: 10px; font-size: 11px; color: var(--subtext); font-weight: 600; letter-spacing: 1px; }
+        .nav-btn {
+            padding: 10px 18px; border-radius: 10px; color: var(--subtext);
+            background: none; border: none; font-weight: 600; font-family: inherit;
+            transition: var(--transition); cursor: pointer;
+        }
+        .nav-btn:hover, .nav-btn.active { color: var(--accent); background: var(--secondary); }
+        
+        /* Square Icon Buttons */
+        .icon-btn {
+            width: 42px; height: 42px; border-radius: 10px; display: flex;
+            align-items: center; justify-content: center; background: var(--secondary);
+            border: none; color: var(--text); cursor: pointer; transition: var(--transition);
+        }
+        .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+        .icon-btn:hover { background: var(--accent); color: var(--bg); }
+        .panic-trigger { color: var(--panic); }
+        .panic-trigger:hover { background: var(--panic); color: white; }
 
-        .viewport { flex: 1; height: 100vh; overflow-y: auto; position: relative; transition: var(--transition); }
-        .section { display: none; animation: fadeIn 0.5s ease; height: 100%; position: relative; }
+        /* Content Area */
+        .viewport { padding-top: 70px; height: 100vh; overflow-y: auto; }
+        .section { display: none; padding: 40px 60px; animation: fadeIn 0.4s ease forwards; }
         .section.active { display: block; }
-        
-        #home, #settings { padding: 60px 80px; }
-        #home h1, #settings h1 { font-size: 56px; font-weight: 900; margin-bottom: 35px; letter-spacing: -2px; }
 
-        #games { padding: 40px; }
-        .counter-label { font-size: 12px; color: var(--subtext); font-weight: 600; margin-bottom: 15px; padding-left: 5px; display: block; }
-        
-        .controls { display: flex; gap: 10px; margin-bottom: 50px; align-items: center; }
-        input, select, .filter-fav-btn { 
-            background: var(--secondary); border: none; color: var(--text); 
-            padding: 12px 20px; border-radius: 12px; outline: none; 
-            font-family: inherit; height: 45px;
-        }
-        #search { flex: 1; }
+        /* Landing & Secret */
+        #landing { height: 100vh; width: 100vw; display: flex; background: #0b0b0b; position: fixed; z-index: 9999; }
+        .transfer-btn { position: absolute; top: 20px; left: 20px; padding: 12px 18px; background: none; border: none; color: var(--subtext); font-weight: 600; cursor: pointer; display: none; }
+        #code-dots { position: fixed; bottom: 10px; left: 10px; display: flex; gap: 4px; }
+        .dot { width: 3px; height: 3px; background: rgba(255,255,255,0.2); border-radius: 50%; }
 
-        .filter-fav-btn { display: flex; align-items: center; justify-content: center; min-width: 45px; transition: var(--transition); }
-        .filter-fav-btn.active { background: var(--accent); color: var(--bg); }
-        .filter-fav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; }
-        .filter-fav-btn.active svg { fill: currentColor; }
+        /* Game Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+        .game-card { background: var(--card); border-radius: 15px; padding: 10px; text-align: center; transition: var(--transition); cursor: pointer; }
+        .game-card:hover { transform: translateY(-5px); background: var(--secondary); }
+        .game-card img { width: 100%; border-radius: 10px; aspect-ratio: 1; object-fit: cover; margin-bottom: 10px; }
+        .game-card span { font-size: 13px; font-weight: 600; color: var(--subtext); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-        
-        .game-card { background: var(--card); border-radius: 18px; padding: 10px; transition: var(--transition); text-align: center; position: relative; }
-        .game-card:hover { transform: scale(1.03); background: var(--secondary); }
-        .game-card img { width: 100%; aspect-ratio: 1/1; border-radius: 12px; margin-bottom: 8px; object-fit: cover; }
-        
-        .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
-        .game-card span { font-size: 12px; color: var(--subtext); font-weight: 600; text-align: left; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        .fav-btn { background: none; border: none; padding: 5px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; }
-        .fav-btn:hover { transform: scale(1.2); }
-        .fav-icon { width: 16px; height: 16px; fill: none; stroke: var(--subtext); stroke-width: 2.5; transition: var(--transition); }
-        .fav-btn.active .fav-icon { fill: var(--accent); stroke: var(--accent); }
-
-        #player { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 20; opacity: 0; transition: opacity 0.5s var(--transition); }
-        #player.active { display: block; opacity: 1; }
-        .top-bar { height: 70px; display: flex; align-items: center; padding: 0 20px; background: var(--sidebar); border-bottom: 1px solid var(--secondary); }
-        
-        .top-right { margin-left: auto; display: flex; gap: 10px; }
-
-        .btn-action { 
-            padding: 10px 18px; border-radius: 12px; background: none; border: none;
-            color: var(--subtext); font-weight: 600; transition: var(--transition); 
-            font-family: inherit; font-size: 14px;
-        }
-        .btn-action:hover { background: var(--secondary); color: var(--accent); }
-        .btn-panic { color: var(--panic); }
-        .btn-panic:hover { background: var(--panic); color: white; }
-
-        .settings-group { max-width: 500px; margin-bottom: 30px; display: flex; flex-direction: column; }
-        .settings-label { color: var(--subtext); font-size: 12px; font-weight: 600; margin-bottom: 12px; padding-left: 5px; }
-        #settings-controls { position: absolute; bottom: 60px; left: 80px; right: 80px; display: flex; justify-content: space-between; align-items: center; }
-        #save-status { color: var(--subtext); font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s ease; }
-        #save-status.visible { opacity: 1; }
-        .save-btn { background: var(--secondary); color: var(--text); border: none; border-radius: 12px; padding: 12px 25px; font-weight: 600; transition: var(--transition); font-family: inherit; }
-        .save-btn:hover { background: var(--accent); color: var(--bg); }
+        /* Game Player */
+        #player { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; }
+        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); }
+        iframe { width: 100%; height: calc(100vh - 70px); border: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -185,106 +92,82 @@
         <div id="code-dots"></div>
     </div>
 
-    <div id="main-ui">
-        <div id="sidebar">
-            <div class="brand">gelly</div>
-            <div class="nav-items">
-                <button class="nav-item active" onclick="tab('home', this)">home</button>
-                <button class="nav-item" onclick="tab('games', this)">games</button>
-                <button class="nav-item" onclick="tab('sounds', this)">soundboard</button>
-                <button class="nav-item" onclick="tab('settings', this)">settings</button>
-            </div>
-            <div class="sidebar-footer">v5.3</div>
+    <div id="navbar">
+        <div class="nav-left">
+            <button class="nav-btn active" onclick="tab('home', this)">home</button>
+            <button class="nav-btn" onclick="tab('games', this)">games</button>
+            <button class="nav-btn" onclick="tab('sounds', this)">soundboard</button>
+        </div>
+        <div class="nav-right">
+            <button class="icon-btn" onclick="tab('settings', this)" title="settings">
+                <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.2,0.06,0.47,0.12,0.61l2.03,1.58C4.82,11.36,4.8,11.68,4.8,12c0,0.33,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+            </button>
+            <button class="icon-btn panic-trigger" onclick="panic()" title="panic">
+                <svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="viewport">
+        <div id="home" class="section active">
+            <h1 style="font-size: 50px; font-weight: 900;">gelly v6.1</h1>
+            <p style="color: var(--subtext);">fully simplified. select a tab to begin.</p>
         </div>
 
-        <div class="viewport">
-            <div id="home" class="section active">
-                <h1>gelly</h1>
-                <p>welcome to uhhh i forgot sorry</p>
-            </div>
+        <div id="games" class="section">
+            <div class="grid" id="game-grid"></div>
+        </div>
 
-            <div id="games" class="section">
-                <span class="counter-label" id="game-count">loading...</span>
-                <div class="controls">
-                    <input type="text" id="search" placeholder="search..." oninput="draw()">
-                    <button id="fav-toggle" class="filter-fav-btn" onclick="toggleFavFilter()" title="show favorites">
-                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </button>
-                    <select id="sort" onchange="updateSort(this.value)">
-                        <option value="az">a-z</option>
-                        <option value="za">z-a</option>
-                    </select>
-                </div>
-                <div class="grid" id="game-grid"></div>
-            </div>
+        <div id="sounds" class="section">
+            <iframe id="sound-frame" style="height: 80vh; border-radius: 20px;"></iframe>
+        </div>
 
-            <div id="sounds" class="section">
-                <iframe id="sound-frame" src="" style="width:100%; height:100%; border:none;"></iframe>
-            </div>
+        <div id="settings" class="section">
+            <h2 style="font-weight: 900;">settings</h2>
+            <p>theme</p>
+            <select id="theme-select" onchange="previewTheme(this.value)" style="padding: 10px; background: var(--secondary); color: white; border: none; border-radius: 8px;">
+                <option value="dark">dark</option>
+                <option value="light">light</option>
+            </select>
+            <p>panic url</p>
+            <input type="text" id="panic-input" placeholder="https://google.com" style="padding: 10px; background: var(--secondary); color: white; border: none; border-radius: 8px;">
+            <br><br>
+            <button class="nav-btn active" onclick="saveSettings()">save changes</button>
+        </div>
+    </div>
 
-            <div id="settings" class="section">
-                <h1>settings</h1>
-                <div class="settings-group">
-                    <span class="settings-label">theme</span>
-                    <select id="theme-select" onchange="handleSettingChange(); previewTheme(this.value)">
-                        <option value="dark">dark</option>
-                        <option value="light">light</option>
-                    </select>
-                </div>
-                <div class="settings-group">
-                    <span class="settings-label">panic url</span>
-                    <input type="text" id="panic-input" placeholder="https://google.com" oninput="handleSettingChange()">
-                </div>
-                <div id="settings-controls">
-                    <div id="save-status">unsaved changes</div>
-                    <button class="save-btn" onclick="saveSettings()">save settings</button>
-                </div>
-            </div>
-
-            <div id="player">
-                <div class="top-bar">
-                    <button class="btn-action" onclick="closeGame()">back</button>
-                    <div class="top-right">
-                        <button class="btn-action btn-panic" onclick="panic()">panic</button>
-                        <button class="btn-action" onclick="toggleFS()">fullscreen</button>
-                    </div>
-                </div>
-                <iframe id="game-frame" src="" style="width:100%; height:calc(100% - 70px); border:none;"></iframe>
+    <div id="player">
+        <div class="player-bar">
+            <button class="nav-btn active" onclick="closeGame()">back</button>
+            <div class="nav-right">
+                <button class="icon-btn panic-trigger" onclick="panic()">
+                    <svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>
+                </button>
+                <button class="icon-btn" onclick="toggleFS()">
+                    <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </button>
             </div>
         </div>
+        <iframe id="game-frame"></iframe>
     </div>
 
     <script>
         let inputSequence = "";
         const dotsContainer = document.getElementById('code-dots');
 
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && (e.shiftKey && e.keyCode === 73)) e.preventDefault(); 
-            if (e.ctrlKey && (e.shiftKey && e.keyCode === 74)) e.preventDefault(); 
-            if (e.ctrlKey && e.keyCode === 85) e.preventDefault(); 
-            if (e.keyCode === 123) e.preventDefault(); 
-
+        document.addEventListener('keydown', (e) => {
             inputSequence += e.key.toLowerCase();
-            
-            // Update Dots
             updateDots(inputSequence.length);
-
             if (inputSequence.length === 4) {
-                if (inputSequence === "gg55") {
-                    document.getElementById('secret-btn').style.display = 'block';
-                }
-                // Reset dots and sequence
-                setTimeout(() => {
-                    inputSequence = "";
-                    updateDots(0);
-                }, 100);
+                if (inputSequence === "gg55") document.getElementById('secret-btn').style.display = 'block';
+                setTimeout(() => { inputSequence = ""; updateDots(0); }, 100);
             }
         });
 
         function updateDots(count) {
             dotsContainer.innerHTML = '';
             for(let i=0; i<count; i++) {
-                const d = document.createElement('div');
+                let d = document.createElement('div');
                 d.className = 'dot';
                 dotsContainer.appendChild(d);
             }
@@ -316,105 +199,54 @@
             { name: "traffic run", id: "trafficrun", img: "trafficrunicon.png" }
         ];
 
-        let favorites = JSON.parse(localStorage.getItem('gelly-favs')) || [];
-        let currentSort = localStorage.getItem('gelly-sort') || 'az';
-        let favFilterActive = localStorage.getItem('gelly-fav-filter') === 'true';
-        let hasUnsavedChanges = false;
-
-        function init() {
-            const panicUrl = localStorage.getItem('gelly-panic') || 'https://google.com';
-            const theme = localStorage.getItem('gelly-theme') || 'dark';
-            document.getElementById('panic-input').value = panicUrl;
-            document.getElementById('theme-select').value = theme;
-            document.documentElement.setAttribute('data-theme', theme);
-            updateSoundboard(theme);
-            if(favFilterActive) document.getElementById('fav-toggle').classList.add('active');
-            draw();
-        }
-
-        function handleSettingChange() {
-            hasUnsavedChanges = true;
-            const status = document.getElementById('save-status');
-            status.innerText = "unsaved changes";
-            status.classList.add('visible');
-        }
-
-        function saveSettings() {
-            const theme = document.getElementById('theme-select').value;
-            const panicUrl = document.getElementById('panic-input').value;
-            localStorage.setItem('gelly-theme', theme);
-            localStorage.setItem('gelly-panic', panicUrl);
-            updateSoundboard(theme);
-            hasUnsavedChanges = false;
-            const status = document.getElementById('save-status');
-            status.innerText = "settings saved";
-            setTimeout(() => { if(!hasUnsavedChanges) status.classList.remove('visible'); }, 3000);
-        }
-
         function tab(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+            if(el.classList.contains('nav-btn')) el.classList.add('active');
+        }
+
+        function draw() {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            gameData.forEach(g => {
+                const div = document.createElement('div');
+                div.className = 'game-card';
+                div.onclick = () => openGame(g.id);
+                div.innerHTML = `<img src="icons/${g.img}"><span>${g.name}</span>`;
+                grid.appendChild(div);
+            });
+        }
+
+        function openGame(id) {
+            document.getElementById('player').style.display = 'block';
+            document.getElementById('game-frame').src = `games/${id}/index.html`;
+        }
+
+        function closeGame() {
+            document.getElementById('player').style.display = 'none';
+            document.getElementById('game-frame').src = '';
         }
 
         function panic() { window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; }
         function toggleFS() { let f = document.getElementById('game-frame'); if (f.requestFullscreen) f.requestFullscreen(); }
 
-        function draw() {
-            const grid = document.getElementById('game-grid');
-            const counter = document.getElementById('game-count');
-            const term = document.getElementById('search').value.toLowerCase();
-            let list = gameData.filter(g => g.name.includes(term));
-            if (favFilterActive) list = list.filter(g => favorites.includes(g.id));
-            if (currentSort === 'az') list.sort((a, b) => a.name.localeCompare(b.name));
-            else list.sort((a, b) => b.name.localeCompare(a.name));
-            
-            if (counter) counter.innerText = `${list.length} games available`;
-            if (!grid) return;
-            grid.innerHTML = '';
-            list.forEach(g => {
-                const isFav = favorites.includes(g.id);
-                const div = document.createElement('div');
-                div.className = 'game-card';
-                div.onclick = () => {
-                    document.getElementById('main-ui').classList.add('sidebar-hidden');
-                    document.getElementById('player').classList.add('active');
-                    document.getElementById('game-frame').src = `games/${g.id}/index.html`;
-                };
-                div.innerHTML = `<img src="icons/${g.img}"><div class="card-footer"><span>${g.name}</span><button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${g.id}', event)"><svg class="fav-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
-                grid.appendChild(div);
-            });
+        function saveSettings() {
+            localStorage.setItem('gelly-theme', document.getElementById('theme-select').value);
+            localStorage.setItem('gelly-panic', document.getElementById('panic-input').value);
+            alert("settings saved");
         }
 
-        function toggleFav(id, event) {
-            event.stopPropagation();
-            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
-            else favorites.push(id);
-            localStorage.setItem('gelly-favs', JSON.stringify(favorites));
-            draw();
-        }
-
-        function toggleFavFilter() {
-            favFilterActive = !favFilterActive;
-            localStorage.setItem('gelly-fav-filter', favFilterActive);
-            document.getElementById('fav-toggle').classList.toggle('active');
-            draw();
-        }
-
-        function updateSort(val) { currentSort = val; localStorage.setItem('gelly-sort', val); draw(); }
-        function previewTheme(t) { document.documentElement.setAttribute('data-theme', t); updateSoundboard(t); }
-
-        function updateSoundboard(t) { 
+        function previewTheme(t) { 
+            document.documentElement.setAttribute('data-theme', t);
             const folder = t === 'light' ? 'soundboardlight' : 'soundboarddark';
-            document.getElementById('sound-frame').src = `soundboards/${folder}/index.html`; 
+            document.getElementById('sound-frame').src = `soundboards/${folder}/index.html`;
         }
 
         function transfer() {
             const win = window.open();
             if (!win) return alert("allow popups");
             win.document.body.style.margin = '0';
-            win.document.body.style.background = '#0b0b0b';
             const ifr = win.document.createElement('iframe');
             ifr.style = "border:none; width:100%; height:100vh;";
             ifr.src = window.location.href + "#cloaked";
@@ -424,17 +256,11 @@
 
         if (window.self !== window.top || window.location.hash === "#cloaked") {
             document.getElementById('landing').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'flex';
-            setTimeout(() => { document.getElementById('main-ui').style.opacity = '1'; }, 50);
         }
 
-        function closeGame() {
-            document.getElementById('main-ui').classList.remove('sidebar-hidden');
-            document.getElementById('player').classList.remove('active');
-            setTimeout(() => { document.getElementById('game-frame').src = ''; }, 600);
-        }
-
-        init();
+        draw();
+        previewTheme(localStorage.getItem('gelly-theme') || 'dark');
+        document.getElementById('panic-input').value = localStorage.getItem('gelly-panic') || 'https://google.com';
     </script>
 </body>
 </html>
