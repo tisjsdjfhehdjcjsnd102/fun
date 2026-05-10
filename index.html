@@ -49,18 +49,28 @@
             display: flex; background: #0b0b0b;
             position: fixed; top: 0; left: 0;
             z-index: 9999;
-            align-items: center; justify-content: center;
         }
 
+        /* Updated Transfer Button Styling */
         .transfer-btn {
-            padding: 12px 24px; background: var(--secondary);
-            border: 1px solid #333; color: var(--accent);
-            border-radius: 12px; font-size: 14px;
-            font-weight: 600; transition: var(--transition);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 12px 18px; 
+            background: none; /* No background by default */
+            border: none; 
+            color: var(--subtext);
+            border-radius: 12px; 
+            font-size: 14px;
+            font-weight: 600; 
+            transition: var(--transition);
             font-family: inherit;
         }
         
-        .transfer-btn:hover { background: var(--accent); color: var(--bg); }
+        .transfer-btn:hover { 
+            background: var(--secondary); /* Sidebar style hover */
+            color: var(--accent); 
+        }
 
         #main-ui { display: none; height: 100vh; width: 100vw; overflow: hidden; opacity: 0; transition: opacity 0.5s ease; }
 
