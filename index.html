@@ -50,15 +50,14 @@
         
         .panic-trigger:hover { color: var(--panic) !important; }
 
-        /* Content Area */
+        /* Viewport */
         .viewport { padding-top: 70px; height: 100vh; overflow-y: auto; }
         .section { display: none; padding: 40px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
         .section.active { display: block; }
 
-        /* Search Bar */
+        /* Games Search */
         .search-container { margin-bottom: 30px; width: 100%; max-width: 400px; }
         #game-search { width: 100%; padding: 12px 20px; background: var(--card); border: 1px solid var(--secondary); border-radius: 12px; color: var(--text); font-family: inherit; transition: var(--transition); }
-        #game-search:focus { border-color: var(--subtext); background: var(--secondary); }
 
         /* Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
@@ -72,26 +71,32 @@
         #save-status.visible { opacity: 1; }
         .save-btn-container { position: absolute; bottom: 40px; right: 60px; }
 
-        /* Player & Loader */
+        /* Player & Loader Background */
         #player { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; opacity: 0; pointer-events: none; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #player.active { opacity: 1; pointer-events: all; transform: scale(1); }
         
-        .loader-bg { 
+        .loader-text-wrapper { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            text-align: center; z-index: 1; width: 100%; padding: 0 40px;
+            text-align: center; z-index: 1; width: 100%; pointer-events: none;
         }
-        .loader-bg p { color: var(--subtext); font-weight: 600; font-size: 14px; margin: 0; }
+        .loader-text-wrapper p { color: var(--subtext); font-weight: 600; font-size: 14px; margin: 0; }
         
         #game-frame { position: relative; width: 100%; height: calc(100vh - 70px); border: none; z-index: 2; background: transparent; }
+
+        /* Landing & Dots */
+        #landing { height: 100vh; width: 100vw; display: flex; background: #0b0b0b; position: fixed; z-index: 9999; pointer-events: none; }
+        #secret-btn { pointer-events: all; position: absolute; top: 20px; left: 20px; padding: 12px 18px; background: var(--secondary); border: none; border-radius: 10px; color: var(--subtext); font-weight: 600; cursor: pointer; display: none; }
+        #code-dots { position: fixed; bottom: 10px; left: 10px; display: flex; gap: 4px; }
+        .dot { width: 4px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 50%; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="landing" style="height: 100vh; width: 100vw; display: flex; background: #0b0b0b; position: fixed; z-index: 9999;">
-        <button id="secret-btn" style="position: absolute; top: 20px; left: 20px; padding: 12px 18px; background: none; border: none; color: var(--subtext); font-weight: 600; cursor: pointer; display: none;" onclick="transfer()">transfer</button>
-        <div id="code-dots" style="position: fixed; bottom: 10px; left: 10px; display: flex; gap: 4px;"></div>
+    <div id="landing">
+        <button id="secret-btn" onclick="transfer()">transfer</button>
+        <div id="code-dots"></div>
     </div>
 
     <div id="navbar">
@@ -101,14 +106,14 @@
             <button class="nav-btn" onclick="tab('sounds', this)">soundboard</button>
         </div>
         <div class="nav-right">
-            <button class="icon-btn panic-trigger" onclick="panic()" title="panic"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
-            <button class="icon-btn" onclick="tab('settings', this)" title="settings"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.2,0.06,0.47,0.12,0.61l2.03,1.58C4.82,11.36,4.8,11.68,4.8,12c0,0.33,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></button>
+            <button class="icon-btn panic-trigger" onclick="panic()"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
+            <button class="icon-btn" onclick="tab('settings', this)"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.2,0.06,0.47,0.12,0.61l2.03,1.58C4.82,11.36,4.8,11.68,4.8,12c0,0.33,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></button>
         </div>
     </div>
 
     <div class="viewport">
         <div id="home" class="section active">
-            <h1 style="font-size: 50px; font-weight: 900; margin-bottom: 0;">gelly v6.7</h1>
+            <h1 style="font-size: 50px; font-weight: 900; margin-bottom: 0;">gelly v6.8</h1>
             <p style="color: var(--subtext); margin-top: 5px; font-weight: 600;">welcome to uhhhh i forgot sorry</p>
         </div>
 
@@ -144,8 +149,8 @@
                 <button class="icon-btn" onclick="toggleFS()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
             </div>
         </div>
-        <div class="loader-bg">
-            <p>please wait... this can take up to 2 minutes on your first launch.</p>
+        <div class="loader-text-wrapper">
+            <p>this can take up to 2 minutes on your first launch.</p>
         </div>
         <iframe id="game-frame"></iframe>
     </div>
@@ -153,6 +158,9 @@
     <script>
         let inputSequence = "";
         let hasUnsavedChanges = false;
+        const dotsContainer = document.getElementById('code-dots');
+
+        // Game List
         const gameData = [
             { name: "2048", id: "2048", img: "2048icon.png" },
             { name: "bitlife", id: "bitlife", img: "bitlifeicon.png" },
@@ -178,6 +186,26 @@
             { name: "suika game", id: "suikagame", img: "suikagameicon.png" },
             { name: "traffic run", id: "trafficrun", img: "trafficrunicon.png" }
         ];
+
+        // Secret Code Logic
+        document.addEventListener('keydown', (e) => {
+            inputSequence += e.key.toLowerCase();
+            if (inputSequence.length > 4) inputSequence = inputSequence.slice(-4);
+            updateDots(inputSequence.length);
+            
+            if (inputSequence === "gg55") {
+                document.getElementById('secret-btn').style.display = 'block';
+            }
+        });
+
+        function updateDots(count) {
+            dotsContainer.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                let d = document.createElement('div');
+                d.className = 'dot';
+                dotsContainer.appendChild(d);
+            }
+        }
 
         function draw(query = "") {
             const grid = document.getElementById('game-grid');
@@ -244,11 +272,16 @@
         function panic() { window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; }
         function toggleFS() { let f = document.getElementById('game-frame'); if (f.requestFullscreen) f.requestFullscreen(); }
 
-        document.addEventListener('keydown', (e) => {
-            inputSequence += e.key.toLowerCase();
-            if (inputSequence.length > 4) inputSequence = inputSequence.slice(-4);
-            if (inputSequence === "gg55") document.getElementById('secret-btn').style.display = 'block';
-        });
+        function transfer() {
+            const win = window.open();
+            if (!win) return;
+            win.document.body.style.margin = '0';
+            const ifr = win.document.createElement('iframe');
+            ifr.style = "border:none; width:100%; height:100vh;";
+            ifr.src = window.location.href + "#cloaked";
+            win.document.body.appendChild(ifr);
+            window.close();
+        }
 
         if (window.self !== window.top || window.location.hash === "#cloaked") {
             document.getElementById('landing').style.display = 'none';
