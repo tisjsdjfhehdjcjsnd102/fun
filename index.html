@@ -39,7 +39,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* FIXED LANDING BUTTON TO TOP LEFT & SIDEBAR STYLE */
         #landing {
             height: 100vh;
             width: 100vw;
@@ -48,30 +47,33 @@
             position: fixed;
             top: 0; left: 0;
             z-index: 9999;
-            padding: 30px 20px; /* Match sidebar padding */
+            padding: 30px 20px;
         }
 
+        /* UPDATED TRANSFER BUTTON: TRANSPARENT BY DEFAULT */
         .transfer-btn {
             position: absolute;
-            top: 42px; /* Match brand/nav vertical alignment */
+            top: 42px;
             left: 20px;
             padding: 12px 18px;
-            background: #151515;
+            background: transparent; /* No background initially */
             border: none;
             color: #777;
             border-radius: 12px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400; /* Normal weight initially */
             cursor: pointer;
             transition: var(--transition);
             width: auto;
             min-width: 120px;
             text-align: left;
+            font-family: inherit;
         }
         
         .transfer-btn:hover {
-            background: #1e1e1e;
+            background: #151515; /* Background appears on hover */
             color: #fff;
+            font-weight: 600; /* Bolds on hover like sidebar */
         }
 
         #main-ui {
@@ -155,7 +157,6 @@
         .btn-panic { color: var(--panic); }
         .btn-panic:hover { background: var(--panic); color: #fff; }
 
-        .hidden { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -174,7 +175,7 @@
                 <button class="nav-item" onclick="tab('sounds', this)">soundboard</button>
                 <button class="nav-item" onclick="tab('settings', this)">settings</button>
             </div>
-            <div class="sidebar-footer">v3.5</div>
+            <div class="sidebar-footer">v3.6</div>
         </div>
 
         <div class="viewport" id="viewport-main">
