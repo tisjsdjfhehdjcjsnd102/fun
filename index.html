@@ -55,7 +55,7 @@
             height: 100vh;
             width: 100vw;
             display: flex;
-            background: #0b0b0b; /* keep landing dark for the 'cloak' feel */
+            background: #0b0b0b;
             position: fixed;
             z-index: 9999;
         }
@@ -141,8 +141,6 @@
 
         #games { padding: 40px; }
 
-        .controls { display: flex; gap: 15px; margin-bottom: 40px; }
-        
         .settings-group {
             max-width: 500px;
             margin-bottom: 40px;
@@ -157,7 +155,6 @@
             padding-left: 5px;
         }
 
-        /* Settings footer positioning */
         .settings-footer {
             position: absolute;
             bottom: 40px;
@@ -184,7 +181,7 @@
 
         .save-btn {
             background: var(--secondary) !important;
-            color: var(--accent) !important;
+            color: #ffffff !important; /* Fixed white text */
             width: auto !important;
             padding: 12px 25px !important;
         }
@@ -261,7 +258,7 @@
                 <div class="nav-item" onclick="tab('sounds', this)">soundboard</div>
                 <div class="nav-item" onclick="tab('settings', this)">settings</div>
             </div>
-            <div class="sidebar-footer">v2.9</div>
+            <div class="sidebar-footer">v3.0</div>
         </div>
 
         <div class="viewport" id="viewport-main">
@@ -283,7 +280,7 @@
             </div>
 
             <div id="sounds" class="section">
-                <iframe src="soundboard/index.html" style="width:100%; height:100%; border:none;"></iframe>
+                <iframe id="sound-frame" src="" style="width:100%; height:100%; border:none;"></iframe>
             </div>
 
             <div id="settings" class="section">
@@ -291,7 +288,7 @@
                 
                 <div class="settings-group">
                     <span class="settings-label">theme</span>
-                    <select id="theme-select" onchange="applyTheme(this.value)">
+                    <select id="theme-select" onchange="previewTheme(this.value)">
                         <option value="dark">dark</option>
                         <option value="light">light</option>
                     </select>
@@ -346,20 +343,28 @@
             { name: "vex 4", id: "vex4", img: "vex4icon.png" }
         ];
 
-        // Settings Logic
         let savedPanicUrl = localStorage.getItem('gelly-panic') || 'https://google.com';
         let savedTheme = localStorage.getItem('gelly-theme') || 'dark';
 
         const panicInput = document.getElementById('panic-input');
         const themeSelect = document.getElementById('theme-select');
         const settingsFooter = document.getElementById('settings-footer');
+        const soundFrame = document.getElementById('sound-frame');
 
-        // Init settings
-        panicInput.value = savedPanicUrl;
-        themeSelect.value = savedTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        // Init
+        function init() {
+            panicInput.value = savedPanicUrl;
+            themeSelect.value = savedTheme;
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateSoundboardPath(savedTheme);
+        }
 
-        function applyTheme(theme) {
+        function updateSoundboardPath(theme) {
+            const folder = theme === 'light' ? 'soundboardlight' : 'soundboarddark';
+            soundFrame.src = `${folder}/index.html`;
+        }
+
+        function previewTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             checkSettings();
         }
@@ -376,9 +381,9 @@
             localStorage.setItem('gelly-panic', savedPanicUrl);
             localStorage.setItem('gelly-theme', savedTheme);
             settingsFooter.classList.remove('visible');
+            updateSoundboardPath(savedTheme); // Refresh board on save
         }
 
-        // Reset unsaved changes when leaving tab
         function resetUnsaved() {
             panicInput.value = savedPanicUrl;
             themeSelect.value = savedTheme;
@@ -447,6 +452,7 @@
             if (f.requestFullscreen) f.requestFullscreen();
         }
 
+        init();
         draw();
     </script>
 </body>
