@@ -104,7 +104,6 @@
         #games { padding: 40px; }
         .counter-label { font-size: 12px; color: var(--subtext); font-weight: 600; margin-bottom: 15px; padding-left: 5px; display: block; }
         
-        /* CONTROLS LAYOUT */
         .controls { display: flex; gap: 10px; margin-bottom: 50px; align-items: center; }
         input, select, .filter-fav-btn { 
             background: var(--secondary); border: none; color: var(--text); 
@@ -146,10 +145,26 @@
         .top-bar { height: 70px; display: flex; align-items: center; padding: 0 20px; background: var(--sidebar); border-bottom: 1px solid var(--secondary); }
         .btn-action { padding: 10px 20px; border-radius: 10px; background: none; border: 1px solid var(--secondary); color: var(--subtext); font-weight: 600; transition: var(--transition); font-family: inherit; }
 
-        /* SETTINGS SPECIFICS */
+        /* SETTINGS UPDATED LAYOUT */
         .settings-group { max-width: 500px; margin-bottom: 30px; display: flex; flex-direction: column; }
         .settings-label { color: var(--subtext); font-size: 12px; font-weight: 600; margin-bottom: 12px; padding-left: 5px; }
-        .save-btn { background: var(--secondary); color: #ffffff; border: none; border-radius: 12px; padding: 12px 25px; font-weight: 600; transition: var(--transition); }
+        
+        #settings-controls {
+            position: absolute; bottom: 60px; left: 80px; right: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        #save-status {
+            color: var(--subtext); font-size: 14px; font-weight: 600;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        #save-status.visible { opacity: 1; }
+
+        .save-btn { 
+            background: var(--secondary); color: var(--text); border: none; 
+            border-radius: 12px; padding: 12px 25px; font-weight: 600; 
+            transition: var(--transition); font-family: inherit;
+        }
         .save-btn:hover { background: var(--accent); color: var(--bg); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -170,7 +185,7 @@
                 <button class="nav-item" onclick="tab('sounds', this)">soundboard</button>
                 <button class="nav-item" onclick="tab('settings', this)">settings</button>
             </div>
-            <div class="sidebar-footer">v4.0</div>
+            <div class="sidebar-footer">v4.1</div>
         </div>
 
         <div class="viewport">
@@ -211,7 +226,11 @@
                     <span class="settings-label">panic url</span>
                     <input type="text" id="panic-input" placeholder="https://google.com">
                 </div>
-                <button class="save-btn" onclick="saveSettings()">save settings</button>
+                
+                <div id="settings-controls">
+                    <div id="save-status">settings saved</div>
+                    <button class="save-btn" onclick="saveSettings()">save settings</button>
+                </div>
             </div>
 
             <div id="player">
@@ -341,7 +360,13 @@
             localStorage.setItem('gelly-theme', document.getElementById('theme-select').value);
             localStorage.setItem('gelly-panic', document.getElementById('panic-input').value);
             updateSoundboard(document.getElementById('theme-select').value);
-            alert("settings saved");
+            
+            // SHOW NOTIFICATION
+            const status = document.getElementById('save-status');
+            status.classList.add('visible');
+            setTimeout(() => {
+                status.classList.remove('visible');
+            }, 3000);
         }
 
         function updateSoundboard(theme) {
