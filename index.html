@@ -17,16 +17,6 @@
             --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        [data-theme="light"] {
-            --bg: #ffffff;
-            --nav: #f5f5f5;
-            --card: #eeeeee;
-            --accent: #000000;
-            --secondary: #e0e0e0;
-            --text: #111111;
-            --subtext: #666666;
-        }
-
         * { box-sizing: border-box; text-transform: lowercase; user-select: none; outline: none; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
@@ -77,42 +67,17 @@
         .loader-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; color: var(--subtext); font-weight: 600; pointer-events: none; width: 100%; text-align: center; }
         #game-frame { position: relative; width: 100%; height: calc(100vh - 70px); border: none; z-index: 2; background: transparent; }
 
-        /* Landing & Secret Input Styles */
         #landing { height: 100vh; width: 100vw; display: flex; align-items: flex-start; justify-content: flex-start; padding: 20px; background: #0b0b0b; position: fixed; z-index: 9999; pointer-events: all; }
-        
         #secret-container { display: flex; align-items: center; position: absolute; top: 20px; left: 20px; opacity: 1; transition: opacity 0.4s ease; }
         #secret-container.hidden { opacity: 0; pointer-events: none; }
-
-        #secret-input { 
-            background: transparent; border: none; 
-            color: var(--subtext); opacity: 0.3;
-            font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; 
-            padding: 10px 0; width: 80px; text-transform: lowercase; 
-            user-select: text; -webkit-text-security: disc;
-            letter-spacing: -1px;
-        }
-
-        #check-btn {
-            background: none; border: none; color: var(--subtext); opacity: 0.3;
-            cursor: pointer; padding: 10px; display: flex; align-items: center; 
-            justify-content: center; transition: var(--transition);
-        }
+        #secret-input { background: transparent; border: none; color: var(--subtext); opacity: 0.3; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 10px 0; width: 80px; text-transform: lowercase; user-select: text; -webkit-text-security: disc; letter-spacing: -1px; }
+        #check-btn { background: none; border: none; color: var(--subtext); opacity: 0.3; cursor: pointer; padding: 10px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
         #check-btn:hover { opacity: 1; color: var(--accent); }
         #check-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-        #secret-btn { 
-            position: absolute; top: 20px; left: 20px; width: 38px; height: 38px;
-            background: none; border: none; border-radius: 10px; color: var(--subtext); 
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.8);
-            transition: opacity 0.6s ease, transform 0.6s ease, color 0.3s ease; 
-            visibility: hidden; pointer-events: none; 
-        }
+        #secret-btn { position: absolute; top: 20px; left: 20px; width: 38px; height: 38px; background: none; border: none; border-radius: 10px; color: var(--subtext); display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.8); transition: opacity 0.6s ease, transform 0.6s ease, color 0.3s ease; visibility: hidden; pointer-events: none; }
         #secret-btn svg { width: 18px; height: 18px; fill: currentColor; }
-        #secret-btn.active { 
-            visibility: visible !important; pointer-events: all !important; 
-            cursor: pointer !important; opacity: 0.3; transform: scale(1);
-        }
+        #secret-btn.active { visibility: visible !important; pointer-events: all !important; cursor: pointer !important; opacity: 0.3; transform: scale(1); }
         #secret-btn.active:hover { color: var(--accent); opacity: 1; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -160,9 +125,7 @@
         </div>
 
         <div id="settings" class="section">
-            <p style="color: var(--subtext); font-weight: 600;">theme</p>
-            <select id="theme-select" onchange="markUnsaved()" style="padding: 12px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-family: inherit; width: 200px; cursor: pointer;"><option value="dark">dark</option><option value="light">light</option></select>
-            <p style="color: var(--subtext); font-weight: 600; margin-top: 30px;">panic url</p>
+            <p style="color: var(--subtext); font-weight: 600;">panic url</p>
             <input type="text" id="panic-input" oninput="markUnsaved()" placeholder="https://google.com" style="padding: 12px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-family: inherit; width: 350px;">
             <span id="save-status">press save changes to save these</span>
             <div class="save-btn-container"><button class="nav-btn active" onclick="saveSettings()">save changes</button></div>
@@ -215,7 +178,6 @@
             const input = document.getElementById('secret-input');
             const container = document.getElementById('secret-container');
             const secretBtn = document.getElementById('secret-btn');
-
             if (input.value === "gg55") {
                 container.classList.add('hidden'); 
                 setTimeout(() => { secretBtn.classList.add('active'); }, 400);
@@ -267,27 +229,20 @@
         }
 
         function saveSettings() {
-            localStorage.setItem('gelly-theme', document.getElementById('theme-select').value);
             localStorage.setItem('gelly-panic', document.getElementById('panic-input').value);
             hasUnsavedChanges = false;
             document.getElementById('save-status').innerText = "saved changes";
-            applyTheme(localStorage.getItem('gelly-theme'));
             setTimeout(() => { if (!hasUnsavedChanges) document.getElementById('save-status').classList.remove('visible'); }, 2000);
         }
 
         function revertSettings() {
-            document.getElementById('theme-select').value = localStorage.getItem('gelly-theme') || 'dark';
             document.getElementById('panic-input').value = localStorage.getItem('gelly-panic') || 'https://google.com';
             hasUnsavedChanges = false;
             document.getElementById('save-status').classList.remove('visible');
-            applyTheme(localStorage.getItem('gelly-theme') || 'dark');
         }
 
-        function applyTheme(t) {
-            document.documentElement.setAttribute('data-theme', t);
-            const folder = t === 'light' ? 'soundboardlight' : 'soundboarddark';
-            document.getElementById('sound-frame').src = `soundboards/${folder}/index.html`;
-        }
+        // Set the soundboard frame directly to the generic folder
+        document.getElementById('sound-frame').src = `soundboards/soundboard/index.html`;
 
         function panic() { window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; }
         function toggleFS() { let f = document.getElementById('game-frame'); if (f.requestFullscreen) f.requestFullscreen(); }
