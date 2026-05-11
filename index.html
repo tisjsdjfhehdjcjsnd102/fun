@@ -14,147 +14,125 @@
             --secondary: #1e1e1e;
             --text: #eeeeee;
             --subtext: #777777;
-            --panic: #ff4444;
             --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        [data-theme="light"] {
-            --bg: #ffffff;
-            --nav: #f5f5f5;
-            --card: #eeeeee;
-            --accent: #000000;
-            --secondary: #e0e0e0;
-            --text: #111111;
-            --subtext: #666666;
         }
 
         * { box-sizing: border-box; text-transform: lowercase; user-select: none; outline: none; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
+        /* Landing & Secret Area */
+        #landing { 
+            height: 100vh; width: 100vw; display: flex; align-items: flex-start; justify-content: flex-start; 
+            padding: 20px; background: #0b0b0b; position: fixed; z-index: 9999; 
+        }
+        
+        .secret-wrapper { position: relative; display: flex; align-items: center; gap: 2px; }
+
+        #secret-container { 
+            display: flex; align-items: center; transition: opacity 0.4s ease, transform 0.4s ease; 
+        }
+        #secret-container.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; }
+
+        #secret-input { 
+            background: transparent; border: none; color: transparent; 
+            font-family: inherit; font-size: 14px; width: 50px; 
+            caret-color: var(--subtext); cursor: text; padding: 0;
+        }
+
+        #dot-display { 
+            position: absolute; left: 32px; display: flex; gap: 3px; pointer-events: none; 
+            color: var(--subtext); opacity: 0.4; font-weight: 900; font-size: 18px; line-height: 0;
+        }
+
+        .icon-unit {
+            width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+            color: var(--subtext); opacity: 0.4; transition: var(--transition);
+        }
+        
+        #check-btn { background: none; border: none; cursor: pointer; padding: 0; }
+        #check-btn:hover { opacity: 1; color: var(--accent); }
+        #check-btn svg, #secret-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+        /* Transfer Icon - Positioned exactly where the check was */
+        #secret-btn { 
+            position: absolute; top: 0; left: 0;
+            background: none; border: none; border-radius: 8px;
+            opacity: 0; transform: scale(0.8);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease; 
+            visibility: hidden; pointer-events: none;
+        }
+        #secret-btn.active { 
+            visibility: visible; pointer-events: all; opacity: 0.4; transform: scale(1);
+        }
+        #secret-btn.active:hover { opacity: 1; color: var(--accent); background: var(--secondary); }
+
+        /* Main UI */
         #navbar {
             height: 70px; background: var(--nav); border-bottom: 1px solid var(--secondary);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 30px; position: fixed; top: 0; width: 100%; z-index: 100;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
-        #navbar.hidden { transform: translateY(-70px); opacity: 0; pointer-events: none; }
-
         .nav-btn { padding: 10px 18px; border-radius: 10px; color: var(--subtext); background: none; border: none; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: inherit; }
-        .nav-btn:hover, .nav-btn.active { color: var(--accent); background: var(--secondary); }
-        
-        .icon-btn { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--subtext); cursor: pointer; transition: var(--transition); }
-        .icon-btn svg { width: 22px; height: 22px; fill: currentColor; }
-        .icon-btn:hover, .icon-btn.active { background: var(--secondary); color: var(--accent); }
+        .nav-btn.active { color: var(--accent); background: var(--secondary); }
 
-        .viewport { padding-top: 70px; height: 100vh; overflow-y: auto; }
-        .section { display: none; padding: 40px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
+        .viewport { padding-top: 70px; height: 100vh; }
+        .section { display: none; padding: 40px 60px; }
         .section.active { display: block; }
-
-        #landing { height: 100vh; width: 100vw; display: flex; align-items: flex-start; justify-content: flex-start; padding: 20px; background: #0b0b0b; position: fixed; z-index: 9999; }
-        
-        /* Secret Input Area */
-        #secret-container { 
-            display: flex; align-items: center; justify-content: center; 
-            min-width: 120px; height: 42px; transition: opacity 0.4s ease; 
-        }
-        #secret-container.hidden { opacity: 0; pointer-events: none; }
-
-        #secret-input { 
-            background: transparent; border: none; color: transparent; 
-            font-family: inherit; font-size: 14px; width: 60px; 
-            caret-color: var(--accent); position: absolute; z-index: 2;
-        }
-
-        /* Visual Dots for the input */
-        #dot-display { 
-            display: flex; gap: 4px; pointer-events: none; 
-            color: var(--subtext); opacity: 0.3; font-weight: 900;
-            font-size: 18px; line-height: 0; margin-top: -5px;
-        }
-
-        #check-btn {
-            background: none; border: none; color: var(--subtext); opacity: 0.3;
-            cursor: pointer; padding: 10px; display: flex; align-items: center; 
-            transition: var(--transition); z-index: 3;
-        }
-        #check-btn:hover { opacity: 1; color: var(--accent); }
-        #check-btn svg { width: 18px; height: 18px; fill: currentColor; }
-
-        /* Icon Button Version of Transfer */
-        #secret-btn { 
-            position: absolute; top: 20px; left: 20px; width: 42px; height: 42px;
-            background: none; border: none; border-radius: 10px; color: var(--subtext); 
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; transform: scale(0.8);
-            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease; 
-            visibility: hidden; pointer-events: none; 
-        }
-        #secret-btn svg { width: 22px; height: 22px; fill: currentColor; }
-        #secret-btn.active { 
-            visibility: visible; pointer-events: all; 
-            opacity: 1; transform: scale(1);
-        }
-        #secret-btn:hover { color: var(--accent); background: var(--secondary); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body onload="focusInput()">
 
     <div id="landing">
-        <div id="secret-container">
-            <button id="check-btn" onclick="checkCode()">
-                <svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
-            </button>
-            <div style="position: relative; display: flex; align-items: center;">
-                <input type="password" id="secret-input" maxlength="4" placeholder="" autocomplete="off" oninput="updateVisualDots()">
-                <div id="dot-display">...</div>
+        <div class="secret-wrapper">
+            <div id="secret-container">
+                <button id="check-btn" class="icon-unit" onclick="checkCode()">
+                    <svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
+                </button>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="password" id="secret-input" maxlength="4" autocomplete="off" oninput="updateVisualDots()">
+                    <div id="dot-display">...</div>
+                </div>
             </div>
+
+            <button id="secret-btn" class="icon-unit" onclick="transfer()">
+                <svg viewBox="0 0 24 24"><path d="M7,2V4H8V18A4,4 0 0,0 12,22A4,4 0 0,0 16,18V4H17V2H7M14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18V4H14V18Z"/></svg>
+            </button>
         </div>
-        
-        <button id="secret-btn" onclick="transfer()">
-            <svg viewBox="0 0 24 24"><path d="M7,2V4H8V18A4,4 0 0,0 12,22A4,4 0 0,0 16,18V4H17V2H7M14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18V4H14V18Z"/></svg>
-        </button>
     </div>
 
     <div id="navbar">
         <div class="nav-left">
-            <button class="nav-btn active" onclick="tab('home', this)">home</button>
-            <button class="nav-btn" onclick="tab('games', this)">games</button>
-            <button class="nav-btn" onclick="tab('sounds', this)">soundboard</button>
-        </div>
-        <div class="nav-right">
-            <button class="icon-btn" onclick="panic()"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
-            <button class="icon-btn" onclick="tab('settings', this)"><svg viewBox="0 0 24 24"><path d="M19.14,12.94...Z"/></svg></button>
+            <button class="nav-btn active">home</button>
+            <button class="nav-btn">games</button>
         </div>
     </div>
 
     <div class="viewport">
-        <div id="home" class="section active">
-            <h1 style="font-size: 50px; font-weight: 900; margin-bottom: 0;">gelly v2.1.1</h1>
-            <p class="home-desc">welcome back.</p>
+        <div class="section active">
+            <h1 style="font-size: 50px; font-weight: 900;">gelly v2.1.2</h1>
         </div>
-        </div>
-
-    <div id="player">
-        <div class="player-bar">
-            <button class="icon-btn" onclick="closeGame()"><svg viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></button>
-            <div id="player-title"></div>
-        </div>
-        <iframe id="game-frame"></iframe>
     </div>
 
     <script>
+        // Auto-focus on load
+        function focusInput() {
+            document.getElementById('secret-input').focus();
+        }
+
+        // Keep focus if user clicks away on the landing background
+        document.getElementById('landing').addEventListener('click', () => {
+            if (!document.getElementById('secret-btn').classList.contains('active')) {
+                focusInput();
+            }
+        });
+
         function updateVisualDots() {
             const input = document.getElementById('secret-input');
             const display = document.getElementById('dot-display');
-            // If empty, show placeholder dots. If typing, show one dot per char.
             if (input.value.length === 0) {
                 display.innerText = "...";
-                display.style.opacity = "0.3";
             } else {
                 display.innerText = ".".repeat(input.value.length);
-                display.style.opacity = "0.8";
             }
         }
 
@@ -178,23 +156,13 @@
             if (e.key === 'Enter') checkCode();
         });
 
-        // Basic functional logic (tabbing, frames, etc)
-        function tab(id, el) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-        }
-
-        function panic() { window.top.location.href = 'https://google.com'; }
-        
         function transfer() {
             const win = window.open();
             if (!win) return;
-            win.document.body.style.margin = '0';
             const ifr = win.document.createElement('iframe');
-            ifr.style = "border:none; width:100%; height:100vh;";
+            ifr.style = "border:none; width:100%; height:100vh; margin:0;";
             ifr.src = window.location.href + "#cloaked";
+            win.document.body.style.margin = '0';
             win.document.body.appendChild(ifr);
             window.close();
         }
