@@ -41,15 +41,6 @@
         .icon-btn svg { width: 22px; height: 22px; fill: currentColor; }
         .icon-btn:hover, .icon-btn.active { background: var(--secondary); color: var(--accent); }
 
-        /* Floating Toggle Button when Bar is Hidden */
-        #show-bar-btn {
-            position: fixed; top: 15px; right: 15px; z-index: 150;
-            background: var(--card); border: 1px solid var(--secondary);
-            opacity: 0; pointer-events: none; transform: scale(0.8);
-        }
-        #show-bar-btn.visible { opacity: 0.6; pointer-events: all; transform: scale(1); }
-        #show-bar-btn.visible:hover { opacity: 1; }
-
         .viewport { 
             padding-top: 70px; 
             height: 100vh; 
@@ -57,9 +48,7 @@
             overflow-y: scroll;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            transition: padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .viewport.full { padding-top: 0; }
         
         .viewport.no-scroll::-webkit-scrollbar { width: 0px; }
 
@@ -70,8 +59,7 @@
         .page-header h1 { font-size: 64px; font-weight: 900; margin: 0; letter-spacing: -2px; color: var(--accent); }
         .page-header p { color: var(--subtext); margin-top: 12px; font-weight: 600; font-size: 16px; opacity: 0.8; }
 
-        #sounds.section, #proxy.section { padding: 0; height: calc(100vh - 70px); overflow: hidden; transition: height 0.5s ease; }
-        .full #sounds.section, .full #proxy.section { height: 100vh; }
+        #sounds.section, #proxy.section { padding: 0; height: calc(100vh - 70px); overflow: hidden; }
         #sound-frame, #proxy-frame { width: 100%; height: 100%; border: none; display: block; background: transparent; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; }
@@ -87,12 +75,10 @@
 
         #player { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; opacity: 0; pointer-events: none; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #player.active { opacity: 1; pointer-events: all; transform: scale(1); }
-        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); position: relative; transition: transform 0.5s ease, opacity 0.3s ease; }
-        .player-bar.hidden { transform: translateY(-70px); opacity: 0; pointer-events: none; }
+        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); position: relative; }
         #player-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 600; font-size: 16px; color: var(--subtext); }
         
-        #game-frame { position: relative; width: 100%; height: calc(100vh - 70px); border: none; z-index: 2; background: transparent; transition: height 0.5s ease; }
-        .full-game #game-frame { height: 100vh; }
+        #game-frame { position: relative; width: 100%; height: calc(100vh - 70px); border: none; z-index: 2; background: transparent; }
 
         #landing { height: 100vh; width: 100vw; display: flex; align-items: flex-start; justify-content: flex-start; padding: 20px; background: #0b0b0b; position: fixed; z-index: 9999; pointer-events: all; }
         #secret-container { display: flex; align-items: center; position: absolute; top: 20px; left: 20px; opacity: 1; transition: opacity 0.4s ease; }
@@ -110,10 +96,6 @@
     </style>
 </head>
 <body oncontextmenu="return false;">
-
-    <button id="show-bar-btn" class="icon-btn" onclick="toggleBar(true)">
-        <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
-    </button>
 
     <div id="landing">
         <div id="secret-container">
@@ -135,7 +117,6 @@
             <button class="nav-btn" onclick="tab('sounds', this)">soundboard</button>
         </div>
         <div class="nav-right">
-            <button class="icon-btn" onclick="toggleBar(false)" title="hide topbar"><svg viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/></svg></button>
             <button class="icon-btn" onclick="toggleFS()" title="fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
             <button class="icon-btn" onclick="panic()"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
             <button class="icon-btn" onclick="tab('settings', this)"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.2,0.06,0.47,0.12,0.61l2.03,1.58C4.82,11.36,4.8,11.68,4.8,12c0,0.33,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></button>
@@ -179,11 +160,10 @@
     </div>
 
     <div id="player">
-        <div class="player-bar" id="game-nav">
+        <div class="player-bar">
             <button class="icon-btn" onclick="closeGame()"><svg viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></button>
             <div id="player-title"></div>
             <div class="nav-right">
-                <button class="icon-btn" onclick="toggleBar(false)"><svg viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/></svg></button>
                 <button class="icon-btn" onclick="toggleFS()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
                 <button class="icon-btn" onclick="panic()"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
             </div>
@@ -193,8 +173,6 @@
 
     <script>
         let hasUnsavedChanges = false;
-        let isBarHidden = false;
-
         const gameData = [
             { name: "2048", id: "2048", img: "2048icon.png" },
             { name: "bitlife", id: "bitlife", img: "bitlifeicon.png" },
@@ -250,38 +228,6 @@
             });
         }
 
-        function toggleBar(show) {
-            isBarHidden = !show;
-            const nav = document.getElementById('navbar');
-            const gameNav = document.getElementById('game-nav');
-            const vp = document.getElementById('main-viewport');
-            const player = document.getElementById('player');
-            const toggle = document.getElementById('show-bar-btn');
-
-            if (show) {
-                nav.classList.remove('hidden');
-                gameNav.classList.remove('hidden');
-                vp.classList.remove('full');
-                player.classList.remove('full-game');
-                toggle.classList.remove('visible');
-            } else {
-                nav.classList.add('hidden');
-                gameNav.classList.add('hidden');
-                vp.classList.add('full');
-                player.classList.add('full-game');
-                toggle.classList.add('visible');
-            }
-        }
-
-        // Listen for Fullscreen changes
-        document.addEventListener('fullscreenchange', () => {
-            if (document.fullscreenElement) {
-                toggleBar(false);
-            } else {
-                toggleBar(true);
-            }
-        });
-
         function openGame(id, name) {
             document.getElementById('navbar').classList.add('hidden');
             document.getElementById('player').classList.add('active');
@@ -292,7 +238,6 @@
         function closeGame() {
             document.getElementById('navbar').classList.remove('hidden');
             document.getElementById('player').classList.remove('active');
-            toggleBar(true); // Ensure bar comes back when leaving game
             setTimeout(() => { document.getElementById('game-frame').src = ''; }, 400);
         }
 
