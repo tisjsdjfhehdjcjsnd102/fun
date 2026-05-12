@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Survival Rate</title>
+    <title>Survival Race</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/z-f3-f1/1@main/style.css">
     <style>
         canvas:focus { outline: none; }
@@ -79,12 +79,12 @@
     <script>
         const buildUrl = "https://cdn.jsdelivr.net/gh/z-f3-f1/1@main/Build";
         const config = {
-            dataUrl: buildUrl + "/yandexBrotli.data.br",
-            frameworkUrl: buildUrl + "/yandexBrotli.framewor.js",
+            dataUrl: buildUrl + "/SurvivalRace.data.br",
+            frameworkUrl: buildUrl + "/SurvivalRace.framework.js",
             codeUrl: "", // Will be set by blob merge
             streamingAssetsUrl: "StreamingAssets",
             companyName: "Brain massage",
-            productName: "Survival Rate",
+            productName: "Survival Race",
             productVersion: "0.0.197"
         };
 
@@ -103,11 +103,15 @@
                         mergedBlob[index] = new Uint8Array(data);
                         loadedCount++;
                         if (loadedCount === files.length) callback(new Blob(mergedBlob));
+                    })
+                    .catch(err => {
+                        console.error("Failed to load part:", file);
                     });
             });
         }
 
-        const wasmFiles = ["yandexBrotli.wasm.br.part1", "yandexBrotli.wasm.br.part2"];
+        // Updated filenames for Survival Race assets
+        const wasmFiles = ["SurvivalRace.wasm.br.part1", "SurvivalRace.wasm.br.part2"];
 
         loadAndMergeFiles(wasmFiles, function (blob) {
             config.codeUrl = URL.createObjectURL(blob);
@@ -116,7 +120,7 @@
             }).then((unityInstance) => {
                 loadingCover.style.display = "none";
             }).catch((message) => {
-                alert(message);
+                console.error(message);
             });
         });
 
