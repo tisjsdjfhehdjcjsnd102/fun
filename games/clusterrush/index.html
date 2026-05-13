@@ -1,4 +1,0 @@
-<script>
-function CompatibilityCheck(){hasWebGL?mobile?console.log("Mobile Unity"):(-1==browser.indexOf("Chrome")&&-1==browser.indexOf("Safari")&&console.log("Browser Check")):console.warn("WebGL Missing");}
-function UnityErrorHandler(e,t,n){return Module.errorhandler&&Module.errorhandler(e,t,n)||(console.log("Invoking error handler due to\n"+e),"function"==typeof dump&&dump("Invoking error handler due to\n"+e),didShowErrorMessage||-1!=e.indexOf("UnknownError")||-1!=e.indexOf("Program terminated with exit(0)"))?void 0:(didShowErrorMessage=!0,-1!=e.indexOf("DISABLE_EXCEPTION_CATCHING")?void alert("An exception has occurred."):-1!=e.indexOf("Cannot enlarge memory arrays")?void alert("Out of memory."):-1!=e.indexOf("Invalid array buffer length")||-1!=e.indexOf("out of memory")?void alert("Memory error."):void alert("Error: "+e))}
-</script>
