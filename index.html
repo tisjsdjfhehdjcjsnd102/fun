@@ -49,55 +49,54 @@
             overflow-y: scroll;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            transition: padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .viewport.fullscreen-mode { padding-top: 0; }
         .viewport.no-scroll { overflow-y: hidden; }
 
-        .section { display: none; padding: 40px 60px 60px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
+        .section { display: none; padding: 40px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); }
         .section.active { display: block; }
 
-        #sounds.section, #proxy.section { padding: 0; height: calc(100vh - 70px); overflow: hidden; }
-        .viewport.fullscreen-mode #sounds.section, 
-        .viewport.fullscreen-mode #proxy.section { height: 100vh; }
-
-        #sound-frame, #proxy-frame { width: 100%; height: 100%; border: none; display: block; background: transparent; }
-
-        /* Headers & Description */
+        /* Headers */
         .page-header { text-align: center; margin-bottom: 50px; width: 100%; margin-top: 20px; }
         .page-header h1 { font-size: 64px; font-weight: 900; margin: 0; letter-spacing: -2px; color: var(--accent); }
-        .page-header p { color: var(--subtext); margin-top: 10px; font-weight: 600; font-size: 16px; opacity: 0.8; }
+        .page-header p { color: var(--subtext); margin-top: 10px; font-weight: 600; font-size: 16px; }
 
-        /* Left-aligned Search & Count */
-        .search-container { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 20px; margin-bottom: 40px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
-        #game-search { padding: 12px 20px; background: var(--secondary); color: white; border: 1px solid #222; border-radius: 12px; font-family: 'Inter', sans-serif; width: 300px; font-weight: 600; }
-        .game-count { color: var(--subtext); font-weight: 600; font-size: 16px; opacity: 0.8; }
+        /* Search & Count - Fixed to span width */
+        .search-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 40px; width: 100%; }
+        #game-search { padding: 12px 20px; background: var(--secondary); color: white; border: 1px solid #222; border-radius: 12px; font-family: 'Inter', sans-serif; width: 400px; font-weight: 600; }
+        .game-count { color: var(--subtext); font-weight: 600; }
 
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        .game-card { background: var(--card); border-radius: 18px; padding: 12px; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
+        /* Grid - Fixed to span all the way across */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 20px; 
+            width: 100%;
+            max-width: 1600px; /* Increased to go across screen */
+            margin: 0 auto; 
+        }
+        .game-card { background: var(--card); border-radius: 18px; padding: 15px; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
         .game-card:hover { transform: translateY(-5px); background: var(--secondary); border-color: #333; }
         .game-card img { width: 100%; border-radius: 12px; aspect-ratio: 1; object-fit: cover; margin-bottom: 12px; }
         .game-card span { font-size: 14px; font-weight: 600; color: var(--subtext); display: block; }
 
         /* Player Overlay */
-        #player { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; opacity: 0; pointer-events: none; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        #player.active { opacity: 1; pointer-events: all; transform: scale(1); }
-        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); position: relative; }
-        #player-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 600; color: var(--subtext); }
-        #game-frame { width: 100%; height: calc(100vh - 70px); border: none; background: transparent; }
+        #player { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; display: none; }
+        #player.active { display: block; }
+        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); }
+        #player-title { font-weight: 600; color: var(--subtext); }
+        #game-frame { width: 100%; height: calc(100vh - 70px); border: none; }
 
         /* Secret Entrance */
-        #landing { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: #0b0b0b; position: fixed; z-index: 9999; }
-        #secret-input { background: transparent; border: none; color: #1a1a1a; text-align: center; font-family: inherit; }
+        #landing { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: #0b0b0b; position: fixed; top: 0; left: 0; z-index: 9999; }
+        #secret-input { background: var(--secondary); border: 1px solid #222; padding: 15px; border-radius: 12px; color: white; text-align: center; font-family: inherit; width: 200px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <div id="landing">
-        <input type="password" id="secret-input" placeholder="••••" oninput="checkCode()">
+        <input type="password" id="secret-input" placeholder="enter passcode" oninput="checkCode()">
     </div>
 
     <div id="navbar">
@@ -108,8 +107,8 @@
             <button class="nav-btn" onclick="tab('sounds', this)">soundboard</button>
         </div>
         <div class="nav-right">
+            <button class="icon-btn" onclick="aboutBlank()">cloak</button>
             <button class="icon-btn" onclick="panic()"><svg viewBox="0 0 24 24"><path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg></button>
-            <button class="icon-btn" onclick="toggleFS()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
             <button class="icon-btn" onclick="tab('settings', this)"><svg viewBox="0 0 24 24"><path d="M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></button>
         </div>
     </div>
@@ -125,7 +124,7 @@
         <div id="games" class="section">
             <div class="page-header">
                 <h1>gelly games</h1>
-                <p>some games wont work on chromebook, but they will in the MacBooks</p>
+                <p>unblocked and high performance.</p>
             </div>
             <div class="search-container">
                 <input type="text" id="game-search" placeholder="search games..." oninput="draw(this.value)">
@@ -135,11 +134,11 @@
         </div>
 
         <div id="proxy" class="section">
-            <iframe id="proxy-frame" src="https://storage.googleapis.com/canvas-lms/index.html#/search"></iframe>
+            <iframe id="proxy-frame" style="width:100%; height:80vh; border:none;" src="https://storage.googleapis.com/canvas-lms/index.html#/search"></iframe>
         </div>
         
         <div id="sounds" class="section">
-            <iframe id="sound-frame"></iframe>
+            <iframe id="sound-frame" style="width:100%; height:80vh; border:none;"></iframe>
         </div>
 
         <div id="settings" class="section">
@@ -152,10 +151,10 @@
     </div>
 
     <div id="player">
-        <div id="player-bar" class="player-bar">
-            <button class="icon-btn" onclick="closeGame()"><svg viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></button>
+        <div class="player-bar">
+            <button class="icon-btn" onclick="closeGame()">back</button>
             <div id="player-title"></div>
-            <button class="icon-btn" onclick="toggleFS()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
+            <button class="icon-btn" onclick="toggleFS()">FS</button>
         </div>
         <iframe id="game-frame"></iframe>
     </div>
@@ -193,23 +192,32 @@
             { name: "traffic jam 3d", id: "trafficjam3d", img: "trafficjam3dicon.png" }
         ];
 
+        function checkCode() {
+            if (document.getElementById('secret-input').value === "gg55") {
+                document.getElementById('landing').style.display = 'none';
+            }
+        }
+
+        function aboutBlank() {
+            const win = window.open();
+            const url = window.location.href;
+            const iframe = win.document.createElement('iframe');
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            iframe.style.position = "fixed";
+            iframe.style.top = "0";
+            iframe.style.left = "0";
+            iframe.src = url;
+            win.document.body.appendChild(iframe);
+            window.location.replace("https://google.com");
+        }
+
         function tab(id, el) {
-            const vp = document.getElementById('main-viewport');
-            
-            // Toggle fixed view for iframes
-            if (['sounds', 'proxy', 'home'].includes(id)) vp.classList.add('no-scroll');
-            else vp.classList.remove('no-scroll');
-
-            // PERFORMANCE: Unload Soundboard if switching away
-            if (id !== 'sounds') document.getElementById('sound-frame').src = '';
-
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn, .icon-btn').forEach(b => b.classList.remove('active'));
-            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(el) el.classList.add('active');
-
-            // PERFORMANCE: Load Soundboard only when entering tab
             if (id === 'sounds') document.getElementById('sound-frame').src = 'soundboard/index.html';
         }
 
@@ -229,17 +237,14 @@
         }
 
         function openGame(id, name) {
-            document.getElementById('navbar').classList.add('hidden');
             document.getElementById('player').classList.add('active');
             document.getElementById('player-title').innerText = name;
             document.getElementById('game-frame').src = `games/${id}/index.html`;
         }
 
         function closeGame() {
-            document.getElementById('navbar').classList.remove('hidden');
             document.getElementById('player').classList.remove('active');
-            // PERFORMANCE: Wipe game from memory immediately
-            setTimeout(() => { document.getElementById('game-frame').src = ''; }, 400);
+            document.getElementById('game-frame').src = '';
         }
 
         function toggleFS() { 
@@ -247,38 +252,13 @@
             else document.exitFullscreen();
         }
 
-        document.addEventListener('fullscreenchange', () => {
-            const isFS = !!document.fullscreenElement;
-            const mainNav = document.getElementById('navbar');
-            const playerBar = document.getElementById('player-bar');
-            const viewport = document.getElementById('main-viewport');
-
-            if (isFS) {
-                mainNav.classList.add('hidden');
-                playerBar.classList.add('hidden');
-                viewport.classList.add('fullscreen-mode');
-            } else {
-                if (!document.getElementById('player').classList.contains('active')) {
-                    mainNav.classList.remove('hidden');
-                }
-                playerBar.classList.remove('hidden');
-                viewport.classList.remove('fullscreen-mode');
-            }
-        });
-
-        function checkCode() {
-            if (document.getElementById('secret-input').value === "gg55") {
-                document.getElementById('landing').style.display = 'none';
-            }
+        function panic() { 
+            window.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; 
         }
 
         function saveSettings() {
             localStorage.setItem('gelly-panic', document.getElementById('panic-input').value);
-            alert("Panic URL saved.");
-        }
-
-        function panic() { 
-            window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; 
+            alert("settings saved.");
         }
 
         draw();
