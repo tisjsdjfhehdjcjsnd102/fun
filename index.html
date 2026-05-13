@@ -31,7 +31,6 @@
             padding: 0 30px; position: fixed; top: 0; width: 100%; z-index: 100;
             transition: var(--transition);
         }
-        /* Completely hide bar in fullscreen */
         #navbar.hidden, .player-bar.hidden { display: none !important; }
 
         .nav-left, .nav-right { display: flex; gap: 10px; align-items: center; }
@@ -52,11 +51,10 @@
             transition: padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .viewport.fullscreen-mode { padding-top: 0; }
-        
         .viewport.no-scroll { overflow-y: hidden; }
         .viewport.no-scroll::-webkit-scrollbar { width: 0px; }
 
-        .section { display: none; padding: 100px 60px 60px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
+        .section { display: none; padding: 60px 60px 60px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
         .section.active { display: block; }
 
         #sounds.section, #proxy.section { padding: 0; height: calc(100vh - 70px); overflow: hidden; }
@@ -65,14 +63,15 @@
 
         #sound-frame, #proxy-frame { width: 100%; height: 100%; border: none; display: block; background: transparent; }
 
-        .page-header { text-align: center; margin-bottom: 30px; width: 100%; }
+        .page-header { text-align: center; margin-bottom: 50px; width: 100%; }
         .page-header h1 { font-size: 64px; font-weight: 900; margin: 0; letter-spacing: -2px; color: var(--accent); }
         .page-header p { color: var(--subtext); margin-top: 12px; font-weight: 600; font-size: 16px; opacity: 0.8; }
 
-        /* Search Layout Refined */
-        .search-container { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 40px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
-        #game-search { padding: 12px 20px; background: var(--secondary); color: white; border: 1px solid #222; border-radius: 12px; font-family: inherit; width: 300px; font-weight: 600; }
-        .game-count { color: var(--subtext); padding: 0; font-weight: 900; font-size: 18px; opacity: 0.5; }
+        .search-container { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 20px; margin-bottom: 40px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        #game-search { padding: 12px 20px; background: var(--secondary); color: white; border: 1px solid #222; border-radius: 12px; font-family: 'Inter', sans-serif; width: 300px; font-weight: 600; }
+        
+        /* Matched to Description Style */
+        .game-count { color: var(--subtext); padding: 0; font-weight: 600; font-size: 16px; opacity: 0.8; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         .game-card { background: var(--card); border-radius: 18px; padding: 12px; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
@@ -139,7 +138,7 @@
     <div class="viewport" id="main-viewport">
         <div id="home" class="section active">
             <div class="page-header">
-                <h1>gelly v2.4.8</h1>
+                <h1>gelly v2.4.5</h1>
                 <p>if you dont like fries then LEAVE now...</p>
             </div>
         </div>
@@ -286,7 +285,6 @@
                 viewport.classList.add('fullscreen-mode');
                 player.classList.add('player-fullscreen');
             } else {
-                // If we aren't inside the game player, show navbar again
                 if (!player.classList.contains('active')) {
                     mainNav.classList.remove('hidden');
                 }
