@@ -25,7 +25,7 @@
         * { box-sizing: border-box; text-transform: lowercase; user-select: none; outline: none; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; width: 100%; overflow: hidden; }
         
-        /* Navbar Logic */
+        /* Navbar Styling */
         #navbar {
             height: 70px; background: var(--nav); border-bottom: 1px solid var(--secondary);
             display: flex; align-items: center; justify-content: space-between;
@@ -53,7 +53,6 @@
         }
         .viewport.fullscreen-mode { padding-top: 0; }
         .viewport.no-scroll { overflow-y: hidden; }
-        .viewport.no-scroll::-webkit-scrollbar { width: 0px; }
 
         .section { display: none; padding: 40px 60px 60px 60px; animation: fadeIn 0.4s ease forwards; min-height: calc(100vh - 70px); position: relative; }
         .section.active { display: block; }
@@ -64,29 +63,33 @@
 
         #sound-frame, #proxy-frame { width: 100%; height: 100%; border: none; display: block; background: transparent; }
 
-        /* Header Styling */
-        .page-header { text-align: center; margin-bottom: 40px; width: 100%; margin-top: 20px; }
+        /* Headers & Description */
+        .page-header { text-align: center; margin-bottom: 50px; width: 100%; margin-top: 20px; }
         .page-header h1 { font-size: 64px; font-weight: 900; margin: 0; letter-spacing: -2px; color: var(--accent); }
         .page-header p { color: var(--subtext); margin-top: 10px; font-weight: 600; font-size: 16px; opacity: 0.8; }
 
-        /* Search Layout */
-        .search-container { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 30px; margin-bottom: 40px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        /* Left-aligned Search & Count */
+        .search-container { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-top: 20px; margin-bottom: 40px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
         #game-search { padding: 12px 20px; background: var(--secondary); color: white; border: 1px solid #222; border-radius: 12px; font-family: 'Inter', sans-serif; width: 300px; font-weight: 600; }
         .game-count { color: var(--subtext); font-weight: 600; font-size: 16px; opacity: 0.8; }
 
+        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         .game-card { background: var(--card); border-radius: 18px; padding: 12px; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
         .game-card:hover { transform: translateY(-5px); background: var(--secondary); border-color: #333; }
         .game-card img { width: 100%; border-radius: 12px; aspect-ratio: 1; object-fit: cover; margin-bottom: 12px; }
-        .game-card span { font-size: 14px; font-weight: 600; color: var(--subtext); transition: var(--transition); display: block; }
+        .game-card span { font-size: 14px; font-weight: 600; color: var(--subtext); display: block; }
 
+        /* Player Overlay */
         #player { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 200; opacity: 0; pointer-events: none; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #player.active { opacity: 1; pointer-events: all; transform: scale(1); }
-        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); position: relative; transition: var(--transition); }
-        
-        #game-frame { position: relative; width: 100%; height: calc(100vh - 70px); border: none; z-index: 2; background: transparent; }
+        .player-bar { height: 70px; background: var(--nav); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--secondary); position: relative; }
+        #player-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 600; color: var(--subtext); }
+        #game-frame { width: 100%; height: calc(100vh - 70px); border: none; background: transparent; }
 
-        #landing { height: 100vh; width: 100vw; display: flex; align-items: flex-start; justify-content: flex-start; padding: 20px; background: #0b0b0b; position: fixed; z-index: 9999; }
+        /* Secret Entrance */
+        #landing { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: #0b0b0b; position: fixed; z-index: 9999; }
+        #secret-input { background: transparent; border: none; color: #1a1a1a; text-align: center; font-family: inherit; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -94,12 +97,7 @@
 <body oncontextmenu="return false;">
 
     <div id="landing">
-        <div id="secret-container">
-            <button id="check-btn" style="background:none; border:none; color: #333;" onclick="checkCode()">
-                <svg width="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>
-            </button>
-            <input type="text" id="secret-input" style="background:transparent; border:none; color:#222;" autocomplete="off">
-        </div>
+        <input type="password" id="secret-input" placeholder="••••" oninput="checkCode()">
     </div>
 
     <div id="navbar">
@@ -119,7 +117,7 @@
     <div class="viewport" id="main-viewport">
         <div id="home" class="section active">
             <div class="page-header">
-                <h1>gelly v2.5.0</h1>
+                <h1>gelly v2.4.9</h1>
                 <p>if you dont like fries then LEAVE now...</p>
             </div>
         </div>
@@ -146,15 +144,17 @@
 
         <div id="settings" class="section">
             <div class="page-header"><h1>settings</h1><p>configure your experience</p></div>
-            <input type="text" id="panic-input" placeholder="panic url" style="padding:12px; background:var(--secondary); color:white; border:none; border-radius:10px; width:300px;">
-            <button class="nav-btn active" onclick="saveSettings()">save</button>
+            <div style="max-width: 400px; margin: 0 auto; text-align: center;">
+                <input type="text" id="panic-input" placeholder="panic url (https://...)" style="padding:12px; background:var(--secondary); color:white; border:none; border-radius:10px; width:100%; margin-bottom: 20px;">
+                <button class="nav-btn active" onclick="saveSettings()" style="width: 100%;">save changes</button>
+            </div>
         </div>
     </div>
 
     <div id="player">
         <div id="player-bar" class="player-bar">
             <button class="icon-btn" onclick="closeGame()"><svg viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></button>
-            <div id="player-title" style="color: var(--subtext); font-weight:600;"></div>
+            <div id="player-title"></div>
             <button class="icon-btn" onclick="toggleFS()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
         </div>
         <iframe id="game-frame"></iframe>
@@ -166,33 +166,51 @@
             { name: "bitlife", id: "bitlife", img: "bitlifeicon.png" },
             { name: "cookie clicker", id: "cookieclicker", img: "cookieclickericon.png" },
             { name: "crossy road", id: "crossyroad", img: "crossyroadicon.png" },
-            { name: "slope", id: "slope", img: "slopeicon.png" }
-            // ... add rest of your games here
+            { name: "dino game", id: "dinogame", img: "dinogameicon.png" },
+            { name: "drive mad", id: "drivemad", img: "drivemadicon.png" },
+            { name: "duck life", id: "ducklife", img: "ducklifeicon.png" },
+            { name: "flappy bird", id: "flappy", img: "flappybirdicon.png" },
+            { name: "geometry dash", id: "geodash", img: "geodashicon.png" },
+            { name: "getting over it", id: "gettingoverit", img: "gettingoveriticon.png" },
+            { name: "minecraft", id: "minecraft", img: "minecrafticon.png" },
+            { name: "paper.io 2", id: "paperio2", img: "paperio2icon.png" },
+            { name: "red ball", id: "redball", img: "redballicon.png" },
+            { name: "run 3", id: "run3", img: "run3icon.png" },
+            { name: "slope", id: "slope", img: "slopeicon.png" },
+            { name: "stickman hook", id: "stickmanhook", img: "stickmanhookicon.png" },
+            { name: "tetris", id: "tetris", img: "tetrisicon.png" },
+            { name: "tiny fishing", id: "tinyfishing", img: "tinyfishingicon.png" },
+            { name: "vex 4", id: "vex4", img: "vex4icon.png" },
+            { name: "moto x3m", id: "motox3m", img: "motox3micon.png" },
+            { name: "drift hunters", id: "drifthunters", img: "drifthuntersicon.png" },
+            { name: "suika game", id: "suikagame", img: "suikagameicon.png" },
+            { name: "traffic run", id: "trafficrun", img: "trafficrunicon.png" },
+            { name: "worlds hardest game", id: "worldshardestgame", img: "worldshardestgameicon.png" },
+            { name: "survival race", id: "survivalrace", img: "survivalraceicon.png" },
+            { name: "the impossible quiz", id: "theimpossiblequiz", img: "theimpossiblequizicon.png" },
+            { name: "gun spin", id: "gunspin", img: "gunspinicon.png" },
+            { name: "cluster rush", id: "clusterrush", img: "clusterrushicon.png" },
+            { name: "traffic jam 3d", id: "trafficjam3d", img: "trafficjam3dicon.png" }
         ];
 
         function tab(id, el) {
             const vp = document.getElementById('main-viewport');
             
-            // Toggle Scrolling
+            // Toggle fixed view for iframes
             if (['sounds', 'proxy', 'home'].includes(id)) vp.classList.add('no-scroll');
             else vp.classList.remove('no-scroll');
 
-            // 1. PERFORMANCE: Unload Soundboard if not in use
-            if (id !== 'sounds') {
-                document.getElementById('sound-frame').src = '';
-            }
+            // PERFORMANCE: Unload Soundboard if switching away
+            if (id !== 'sounds') document.getElementById('sound-frame').src = '';
 
-            // 2. Tab switching logic
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn, .icon-btn').forEach(b => b.classList.remove('active'));
+            
             document.getElementById(id).classList.add('active');
             if(el) el.classList.add('active');
 
-            // 3. PERFORMANCE: Load soundboard only when needed
-            if (id === 'sounds') {
-                document.getElementById('sound-frame').src = 'soundboard/index.html';
-            }
-            // Proxy frame src is NOT cleared, so it stays loaded.
+            // PERFORMANCE: Load Soundboard only when entering tab
+            if (id === 'sounds') document.getElementById('sound-frame').src = 'soundboard/index.html';
         }
 
         function draw(query = "") {
@@ -220,7 +238,7 @@
         function closeGame() {
             document.getElementById('navbar').classList.remove('hidden');
             document.getElementById('player').classList.remove('active');
-            // PERFORMANCE: Unload game immediately when closed
+            // PERFORMANCE: Wipe game from memory immediately
             setTimeout(() => { document.getElementById('game-frame').src = ''; }, 400);
         }
 
@@ -231,16 +249,20 @@
 
         document.addEventListener('fullscreenchange', () => {
             const isFS = !!document.fullscreenElement;
+            const mainNav = document.getElementById('navbar');
+            const playerBar = document.getElementById('player-bar');
+            const viewport = document.getElementById('main-viewport');
+
             if (isFS) {
-                document.getElementById('navbar').classList.add('hidden');
-                document.getElementById('player-bar').classList.add('hidden');
-                document.getElementById('main-viewport').classList.add('fullscreen-mode');
+                mainNav.classList.add('hidden');
+                playerBar.classList.add('hidden');
+                viewport.classList.add('fullscreen-mode');
             } else {
                 if (!document.getElementById('player').classList.contains('active')) {
-                    document.getElementById('navbar').classList.remove('hidden');
+                    mainNav.classList.remove('hidden');
                 }
-                document.getElementById('player-bar').classList.remove('hidden');
-                document.getElementById('main-viewport').classList.remove('fullscreen-mode');
+                playerBar.classList.remove('hidden');
+                viewport.classList.remove('fullscreen-mode');
             }
         });
 
@@ -252,9 +274,12 @@
 
         function saveSettings() {
             localStorage.setItem('gelly-panic', document.getElementById('panic-input').value);
+            alert("Panic URL saved.");
         }
 
-        function panic() { window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; }
+        function panic() { 
+            window.top.location.href = localStorage.getItem('gelly-panic') || 'https://google.com'; 
+        }
 
         draw();
     </script>
