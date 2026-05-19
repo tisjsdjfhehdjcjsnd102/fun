@@ -185,14 +185,21 @@
             if (document.fullscreenElement) document.exitFullscreen();
             document.getElementById('navbar').classList.remove('hidden'); 
             document.getElementById('player').classList.remove('active'); 
-            
-            // Instantly clear the game source
             document.getElementById('game-frame').src = ''; 
         }
         
         function tab(id, el) { 
             const vp = document.getElementById('main-viewport'); 
+            const sbf = document.getElementById('soundboard-frame');
+            
             if (['proxy', 'home', 'sounds'].includes(id)) vp.classList.add('no-scroll'); else vp.classList.remove('no-scroll'); 
+            
+            // If leaving the soundboard tab, completely reload its source to stop all sound
+            if (id !== 'sounds') {
+                sbf.src = '';
+                sbf.src = 'soundboard/index.html';
+            }
+            
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); 
             document.querySelectorAll('.nav-btn, .icon-btn').forEach(b => b.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
@@ -241,7 +248,6 @@
         // Global Panic Key Listener
         document.addEventListener('keydown', (e) => {
             const panicKey = localStorage.getItem('gelly-panic-key') || '`';
-            // Only trigger if we aren't currently mapping the keybind
             if (e.key === panicKey && document.activeElement.id !== 'panic-key-input' && document.activeElement.id !== 'secret-input') {
                 panic();
             }
